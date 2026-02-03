@@ -4,3 +4,4 @@ streamlit-authenticator
 plotly
 xlsxwriter
 gspread
+st-gsheets-connection
