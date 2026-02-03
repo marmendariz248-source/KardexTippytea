@@ -7,16 +7,9 @@ import plotly.express as px
 import io
 
 # --- 1. CONFIGURACIÓN ---
-st.set_page_config(page_title="Tippytea | Business Intelligence", layout="wide", page_icon="🍵")
+st.set_page_config(page_title="Tippytea | Kardex", layout="wide", page_icon="🍵")
 
-# Estilo visual original (Tippytea Green)
-st.markdown("""
-    <style>
-    .stApp { background: linear-gradient(135deg, #f3f6f1 0%, #dce5d1 100%); }
-    .login-card { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-top: 5px solid #2e7d32; text-align: center; }
-    div.stButton > button { background-color: #2e7d32 !important; color: white !important; border-radius: 10px !important; font-weight: bold !important; width: 100%; }
-    </style>
-""", unsafe_allow_html=True)
+FILE_MOVS = "movimientos_kardex.csv"
 
 def to_excel(df):
     output = io.BytesIO()
@@ -45,38 +38,33 @@ def cargar_base_inicial():
         return df_base.dropna(subset=['Producto'])
     return pd.DataFrame()
 
-# --- CONEXIÓN DE LECTURA SEGURA ---
-def cargar_movimientos_nube():
-    sheet_id = st.secrets["gsheet_id"]
-    url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv"
-    try:
-        return pd.read_csv(url)
-    except:
-        return pd.DataFrame(columns=['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario'])
-
 # --- 2. SEGURIDAD ---
 credentials = {"usernames": {
     "martin_admin": {"name": "Martín Tippytea", "password": "Tippytea2025*"},
     "jennys_contabilidad": {"name": "Jenny Contabilidad", "password": "Tippytea2026+"}
 }}
 stauth.Hasher.hash_passwords(credentials)
-authenticator = stauth.Authenticate(credentials, "tippy_v10", "auth_key_1010", cookie_expiry_days=30)
+authenticator = stauth.Authenticate(credentials, "tippy_v11", "auth_key_1111", cookie_expiry_days=30)
 
 if not st.session_state.get("authentication_status"):
     c1, c2, c3 = st.columns([1, 1.2, 1])
     with c2:
-        st.markdown('<div class="login-card">', unsafe_allow_html=True)
         st.image("https://tippytea.com/wp-content/uploads/2021/07/logo-tippytea.png", width=200)
         authenticator.login(location='main')
-        st.markdown('</div>', unsafe_allow_html=True)
 
 if st.session_state["authentication_status"]:
     authenticator.logout('Cerrar Sesión', 'sidebar')
     
+    # Cargar base de datos
     df_base = cargar_base_inicial()
-    df_movs = cargar_movimientos_nube()
+    
+    # Cargar movimientos del archivo local (el que no da error)
+    if os.path.exists(FILE_MOVS):
+        df_movs = pd.read_csv(FILE_MOVS)
+    else:
+        df_movs = pd.DataFrame(columns=['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario'])
 
-    # --- LÓGICA DE STOCKS ---
+    # Calcular Stocks
     if not df_movs.empty:
         df_movs['Cantidad'] = pd.to_numeric(df_movs['Cantidad'], errors='coerce').fillna(0)
         df_movs['Ajuste'] = df_movs.apply(lambda x: x['Cantidad'] if x['Tipo'] == 'Entrada' else -x['Cantidad'], axis=1)
@@ -101,54 +89,53 @@ if st.session_state["authentication_status"]:
                     fecha = c2.date_input("Fecha:", datetime.now())
                     for s in sel:
                         cid = s.split(" | ")[0]
-                        st.number_input(f"{s.split(' | ')[1]}", key=f"v_{cid}", min_value=0.0)
+                        st.number_input(f"{s.split(' | ')[1]}", key=f"val_{cid}", min_value=0.0)
                     
                     if st.form_submit_button("Guardar Movimiento"):
                         nuevos = []
                         for s in sel:
                             cid = s.split(" | ")[0]
-                            nuevos.append({'Fecha': str(fecha), 'Codigo': cid, 'Producto': s.split(" | ")[1],
-                                           'Tipo': tipo, 'Cantidad': float(st.session_state[f"v_{cid}"]),
-                                           'Unidad': df_base[df_base['Codigo'] == cid]['Unidad'].values[0],
-                                           'Usuario': st.session_state['username']})
-                        
-                        # ACTUALIZACIÓN LOCAL + AVISO
-                        df_upd = pd.concat([df_movs, pd.DataFrame(nuevos)], ignore_index=True)
-                        df_upd.to_csv("movimientos_temporales.csv", index=False)
-                        st.success("¡Movimiento registrado en la sesión!")
-                        st.info("Para persistir cambios en la nube, descarga el historial al final del día.")
+                            nuevos.append({
+                                'Fecha': str(fecha), 'Codigo': cid, 'Producto': s.split(" | ")[1],
+                                'Tipo': tipo, 'Cantidad': float(st.session_state[f"val_{cid}"]),
+                                'Unidad': df_base[df_base['Codigo'] == cid]['Unidad'].values[0],
+                                'Usuario': st.session_state['username']
+                            })
+                        df_updated = pd.concat([df_movs, pd.DataFrame(nuevos)], ignore_index=True)
+                        df_updated.to_csv(FILE_MOVS, index=False)
+                        st.success("¡Movimiento guardado con éxito!")
                         st.rerun()
 
-        st.markdown("### 📑 Resumen Detallado (Inicial | Movimiento | Final)")
+        st.markdown("### 📑 Resumen de Transacciones (Stock Inicial -> Final)")
         if not df_movs.empty:
             reporte_det = df_movs.copy().merge(df_final[['Codigo', 'Stock_Inicial', 'Stock_Actual']], on='Codigo', how='left')
             reporte_det['Mov.'] = reporte_det.apply(lambda x: f"+ {x['Cantidad']}" if x['Tipo'] == 'Entrada' else f"- {x['Cantidad']}", axis=1)
             reporte_det = reporte_det[['Fecha', 'Producto', 'Stock_Inicial', 'Mov.', 'Stock_Actual', 'Usuario']].sort_index(ascending=False)
             st.dataframe(reporte_det.head(10), use_container_width=True, hide_index=True)
         
-        st.markdown("### 📦 Stock Actualizado")
+        st.markdown("### 📦 Inventario General")
         st.dataframe(df_final[['Codigo', 'Producto', 'Unidad', 'Stock_Actual']], use_container_width=True, hide_index=True)
 
     with tab2:
-        st.markdown("### 📊 Análisis de Movimientos")
+        st.markdown("### 📊 Análisis Contable")
         if not df_movs.empty:
             c1, c2 = st.columns([2, 1])
             with c1:
-                # Gráfica restaurada
                 fig = px.bar(df_movs.groupby(['Producto', 'Tipo'])['Cantidad'].sum().reset_index(), 
                              x='Producto', y='Cantidad', color='Tipo', barmode='group',
-                             title="Volumen de Movimientos por Producto",
                              color_discrete_map={'Entrada':'#2e7d32', 'Salida':'#e74c3c'})
                 st.plotly_chart(fig, use_container_width=True)
             with c2:
-                st.subheader("📥 Exportar Reportes")
-                st.download_button("📥 Inventario Completo (.xlsx)", data=to_excel(df_final[['Codigo','Producto','Unidad','Stock_Actual']]), file_name="Inventario_Tippytea.xlsx")
-                st.download_button("📥 Historial de Movimientos (.xlsx)", data=to_excel(reporte_det if not df_movs.empty else df_movs), file_name="Kardex_Movimientos.xlsx")
+                st.subheader("📥 Descargar Reportes")
+                st.download_button("📥 Inventario Completo (.xlsx)", data=to_excel(df_final[['Codigo','Producto','Unidad','Stock_Actual']]), file_name="Inventario.xlsx")
+                st.download_button("📥 Historial Movimientos (.xlsx)", data=to_excel(reporte_det), file_name="Historial.xlsx")
         else:
-            st.info("No hay datos para mostrar gráficas aún.")
+            st.info("Aún no hay movimientos para mostrar en las gráficas.")
 
     with tab3:
-        st.subheader("⚙️ Configuración del Sistema")
+        st.subheader("⚙️ Mantenimiento")
         if st.button("↩️ Deshacer Último Registro"):
             if not df_movs.empty:
-                st.warning("Opción disponible al conectar API de escritura.")
+                df_rev = df_movs.drop(df_movs.index[-1])
+                df_rev.to_csv(FILE_MOVS, index=False)
+                st.warning("Último movimiento eliminado"); st.rerun()
