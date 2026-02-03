@@ -102,7 +102,7 @@ if st.session_state["authentication_status"]:
 
     tab1, tab2, tab3 = st.tabs(["📋 Gestión de Stock", "📈 Análisis Contable", "⚙️ Configuración"])
 
-    # --- TAB 1: GESTIÓN ---
+   # --- TAB 1: GESTIÓN ---
     with tab1:
         st.markdown("### 🛠️ Registro de Movimientos")
         with st.expander("Registrar Entradas / Salidas", expanded=True):
@@ -114,25 +114,58 @@ if st.session_state["authentication_status"]:
                     tipo = c_f1.radio("Tipo:", ["Salida", "Entrada"], horizontal=True)
                     fecha = c_f2.date_input("Fecha:", datetime.now())
                     for s in sel:
-                        cid = s.split(" | ")[0];
+                        cid = s.split(" | ")[0]
                         pnom = s.split(" | ")[1]
                         unit = df_base[df_base['Codigo'] == cid]['Unidad'].values[0]
                         st.number_input(f"{pnom} ({unit})", key=f"val_{cid}", min_value=0.0)
+                    
                     if st.form_submit_button("Guardar"):
                         nuevos = []
                         for s in sel:
                             cid = s.split(" | ")[0]
-                            nuevos.append({'Fecha': fecha, 'Codigo': cid, 'Producto': s.split(" | ")[1],
-                                           'Tipo': tipo, 'Cantidad': st.session_state[f"val_{cid}"],
-                                           'Unidad': df_base[df_base['Codigo'] == cid]['Unidad'].values[0],
-                                           'Usuario': st.session_state['username']})
+                            nuevos.append({
+                                'Fecha': fecha, 
+                                'Codigo': cid, 
+                                'Producto': s.split(" | ")[1],
+                                'Tipo': tipo, 
+                                'Cantidad': st.session_state[f"val_{cid}"],
+                                'Unidad': df_base[df_base['Codigo'] == cid]['Unidad'].values[0],
+                                'Usuario': st.session_state['username']
+                            })
                         df_movs = pd.concat([df_movs, pd.DataFrame(nuevos)], ignore_index=True)
                         df_movs.to_csv(FILE_MOVS, index=False)
-                        st.success("¡Registrado!");
+                        st.success("¡Registrado!")
                         st.rerun()
 
-        st.dataframe(df_final[['Codigo', 'Producto', 'Unidad', 'Stock_Actual']], use_container_width=True,
-                     hide_index=True)
+        # --- NUEVA SECCIÓN: LISTADO DE ÚLTIMOS MOVIMIENTOS CON STOCK ---
+        st.divider()
+        st.markdown("### 📑 Resumen de Transacciones")
+        
+        if not df_movs.empty:
+            # Creamos una copia para el reporte visual
+            reporte = df_movs.copy()
+            
+            # Cruzamos con df_final para obtener el Stock Actual
+            reporte = reporte.merge(df_final[['Codigo', 'Stock_Inicial', 'Stock_Actual']], on='Codigo', how='left')
+            
+            # Calculamos el Stock Antes del movimiento específico
+            # Stock_Antes = Stock_Actual - (Suma de todos los ajustes hasta ese momento)
+            # Para simplificar la vista del usuario:
+            reporte['Movimiento'] = reporte.apply(lambda x: f"+ {x['Cantidad']}" if x['Tipo'] == 'Entrada' else f"- {x['Cantidad']}", axis=1)
+            
+            # Ordenamos para mostrar lo más reciente arriba
+            reporte_vista = reporte[['Fecha', 'Producto', 'Stock_Inicial', 'Movimiento', 'Stock_Actual', 'Usuario']].sort_index(ascending=False)
+            
+            # Renombramos columnas para que Jenny lo entienda claro
+            reporte_vista.columns = ['Fecha', 'Producto', 'S. Inicial (Excel)', 'Movimiento', 'S. Final (Actual)', 'Responsable']
+            
+            st.dataframe(reporte_vista, use_container_width=True, hide_index=True)
+        else:
+            st.info("No hay movimientos registrados todavía.")
+
+        st.divider()
+        st.markdown("### 📦 Inventario General")
+        st.dataframe(df_final[['Codigo', 'Producto', 'Unidad', 'Stock_Actual']], use_container_width=True, hide_index=True)
 
     # --- TAB 2: ANÁLISIS CONTABLE ---
     with tab2:
@@ -208,4 +241,5 @@ if st.session_state["authentication_status"]:
 
             st.divider()
             if st.button("🔴 RESET TOTAL"):
+
                 if os.path.exists(FILE_MOVS): os.remove(FILE_MOVS); st.rerun()
