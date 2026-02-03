@@ -11,6 +11,22 @@ st.set_page_config(page_title="Tippytea | Kardex", layout="wide", page_icon="�
 
 FILE_MOVS = "movimientos_kardex.csv"
 
+# Función para asegurar que el archivo de movimientos exista con sus columnas
+def inicializar_archivo_movs():
+    columnas = ['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario']
+    if not os.path.exists(FILE_MOVS):
+        pd.DataFrame(columns=columnas).to_csv(FILE_MOVS, index=False)
+    else:
+        # Verificar que tenga las columnas necesarias
+        try:
+            df_temp = pd.read_csv(FILE_MOVS)
+            if 'Cantidad' not in df_temp.columns:
+                pd.DataFrame(columns=columnas).to_csv(FILE_MOVS, index=False)
+        except:
+            pd.DataFrame(columns=columnas).to_csv(FILE_MOVS, index=False)
+
+inicializar_archivo_movs()
+
 def to_excel(df):
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
@@ -44,7 +60,7 @@ credentials = {"usernames": {
     "jennys_contabilidad": {"name": "Jenny Contabilidad", "password": "Tippytea2026+"}
 }}
 stauth.Hasher.hash_passwords(credentials)
-authenticator = stauth.Authenticate(credentials, "tippy_v11", "auth_key_1111", cookie_expiry_days=30)
+authenticator = stauth.Authenticate(credentials, "tippy_v12", "auth_key_1212", cookie_expiry_days=30)
 
 if not st.session_state.get("authentication_status"):
     c1, c2, c3 = st.columns([1, 1.2, 1])
@@ -55,17 +71,11 @@ if not st.session_state.get("authentication_status"):
 if st.session_state["authentication_status"]:
     authenticator.logout('Cerrar Sesión', 'sidebar')
     
-    # Cargar base de datos
     df_base = cargar_base_inicial()
-    
-    # Cargar movimientos del archivo local (el que no da error)
-    if os.path.exists(FILE_MOVS):
-        df_movs = pd.read_csv(FILE_MOVS)
-    else:
-        df_movs = pd.DataFrame(columns=['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario'])
+    df_movs = pd.read_csv(FILE_MOVS)
 
-    # Calcular Stocks
-    if not df_movs.empty:
+    # --- CÁLCULO DE STOCKS (CORREGIDO) ---
+    if not df_movs.empty and 'Cantidad' in df_movs.columns:
         df_movs['Cantidad'] = pd.to_numeric(df_movs['Cantidad'], errors='coerce').fillna(0)
         df_movs['Ajuste'] = df_movs.apply(lambda x: x['Cantidad'] if x['Tipo'] == 'Entrada' else -x['Cantidad'], axis=1)
         resumen = df_movs.groupby('Codigo')['Ajuste'].sum().reset_index()
@@ -103,17 +113,17 @@ if st.session_state["authentication_status"]:
                             })
                         df_updated = pd.concat([df_movs, pd.DataFrame(nuevos)], ignore_index=True)
                         df_updated.to_csv(FILE_MOVS, index=False)
-                        st.success("¡Movimiento guardado con éxito!")
+                        st.success("¡Guardado correctamente!")
                         st.rerun()
 
-        st.markdown("### 📑 Resumen de Transacciones (Stock Inicial -> Final)")
+        st.markdown("### 📑 Resumen Detallado (Inicial | Movimiento | Final)")
         if not df_movs.empty:
             reporte_det = df_movs.copy().merge(df_final[['Codigo', 'Stock_Inicial', 'Stock_Actual']], on='Codigo', how='left')
             reporte_det['Mov.'] = reporte_det.apply(lambda x: f"+ {x['Cantidad']}" if x['Tipo'] == 'Entrada' else f"- {x['Cantidad']}", axis=1)
             reporte_det = reporte_det[['Fecha', 'Producto', 'Stock_Inicial', 'Mov.', 'Stock_Actual', 'Usuario']].sort_index(ascending=False)
-            st.dataframe(reporte_det.head(10), use_container_width=True, hide_index=True)
+            st.dataframe(reporte_det.head(15), use_container_width=True, hide_index=True)
         
-        st.markdown("### 📦 Inventario General")
+        st.markdown("### 📦 Stock Actualizado")
         st.dataframe(df_final[['Codigo', 'Producto', 'Unidad', 'Stock_Actual']], use_container_width=True, hide_index=True)
 
     with tab2:
@@ -130,7 +140,7 @@ if st.session_state["authentication_status"]:
                 st.download_button("📥 Inventario Completo (.xlsx)", data=to_excel(df_final[['Codigo','Producto','Unidad','Stock_Actual']]), file_name="Inventario.xlsx")
                 st.download_button("📥 Historial Movimientos (.xlsx)", data=to_excel(reporte_det), file_name="Historial.xlsx")
         else:
-            st.info("Aún no hay movimientos para mostrar en las gráficas.")
+            st.info("No hay movimientos registrados para mostrar análisis.")
 
     with tab3:
         st.subheader("⚙️ Mantenimiento")
@@ -138,4 +148,4 @@ if st.session_state["authentication_status"]:
             if not df_movs.empty:
                 df_rev = df_movs.drop(df_movs.index[-1])
                 df_rev.to_csv(FILE_MOVS, index=False)
-                st.warning("Último movimiento eliminado"); st.rerun()
+                st.warning("Último registro eliminado."); st.rerun()
