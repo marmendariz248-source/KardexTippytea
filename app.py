@@ -5,33 +5,23 @@ from datetime import datetime
 import os
 import plotly.express as px
 import io
-import glob
 
 # --- 1. CONFIGURACIÓN ---
 st.set_page_config(page_title="Tippytea | Kardex Pro", layout="wide", page_icon="🍵")
 
-# Función mejorada para encontrar tu archivo de movimientos
-def encontrar_archivo_datos():
-    # Busca cualquier archivo que tenga estas palabras clave
-    patrones = ["*movimientos*", "*kardex*", "Copia*"]
-    for patron in patrones:
-        archivos = glob.glob(patron + ".csv")
-        if archivos:
-            return archivos[0]
-    return "movimientos_kardex.csv"
-
-FILE_MOVS = encontrar_archivo_datos()
+FILE_MOVS = "movimientos_kardex.csv"
 FILE_EXTRA_PRODS = "productos_extra.csv"
+FILE_PLANTA = "Inventarios - Planta.csv"
 
 def inicializar_archivos():
     if not os.path.exists(FILE_MOVS):
-        pd.DataFrame(columns=['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario']).to_csv(FILE_MOVS, index=False)
+        pd.DataFrame(columns=['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario']).to_csv(FILE_MOVS, index=False, sep=';')
     if not os.path.exists(FILE_EXTRA_PRODS):
-        pd.DataFrame(columns=['Codigo', 'Producto', 'Unidad', 'Stock_Inicial']).to_csv(FILE_EXTRA_PRODS, index=False)
+        pd.DataFrame(columns=['Codigo', 'Producto', 'Unidad', 'Stock_Inicial']).to_csv(FILE_EXTRA_PRODS, index=False, sep=';')
 
 inicializar_archivos()
 
-# --- FUNCIONES DE LIMPIEZA ---
+# --- FUNCIONES ---
 def to_excel(df):
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
@@ -48,31 +38,32 @@ def limpiar_monto(valor):
 
 @st.cache_data
 def cargar_base_completa():
-    file_path = 'Inventarios - Planta.csv'
-    df_base = pd.DataFrame()
-    if os.path.exists(file_path):
-        # Saltamos 5 filas por el formato del reporte de Tippytea
-        df = pd.read_csv(file_path, skiprows=5)
-        df.columns = df.columns.str.strip()
-        col_conteo = 'Conteo 02-02-2026'
-        
-        # Intentamos obtener columnas necesarias
-        target_cols = ['Codigo', 'Nombre', 'Unidad', col_conteo]
-        if all(c in df.columns for c in target_cols):
-            df_base = df[target_cols].copy()
-        else:
-            df_base = df.iloc[:, [0, 1, 2, 3]].copy()
+    df_base = pd.DataFrame(columns=['Codigo', 'Producto', 'Unidad', 'Stock_Inicial'])
+    if os.path.exists(FILE_PLANTA):
+        try:
+            df = pd.read_csv(FILE_PLANTA, skiprows=5)
+            df.columns = df.columns.str.strip()
+            # Buscamos la columna de stock (la del 02-02-2026)
+            col_stock = [c for c in df.columns if 'Conteo' in c]
+            if col_stock:
+                df_base = df[['Codigo', 'Nombre', 'Unidad', col_stock[0]]].copy()
+            else:
+                df_base = df.iloc[:, [0, 1, 2, 3]].copy()
             
-        df_base.columns = ['Codigo', 'Producto', 'Unidad', 'Stock_Inicial']
-        df_base['Stock_Inicial'] = df_base['Stock_Inicial'].apply(limpiar_monto)
-        df_base['Codigo'] = df_base['Codigo'].astype(str).str.strip()
-        df_base = df_base.dropna(subset=['Producto'])
+            df_base.columns = ['Codigo', 'Producto', 'Unidad', 'Stock_Inicial']
+            df_base['Stock_Inicial'] = df_base['Stock_Inicial'].apply(limpiar_monto)
+            df_base['Codigo'] = df_base['Codigo'].astype(str).str.strip()
+        except:
+            pass
 
     if os.path.exists(FILE_EXTRA_PRODS):
-        df_extra = pd.read_csv(FILE_EXTRA_PRODS)
-        df_extra['Codigo'] = df_extra['Codigo'].astype(str).str.strip()
-        df_base = pd.concat([df_base, df_extra], ignore_index=True)
-    return df_base
+        try:
+            df_extra = pd.read_csv(FILE_EXTRA_PRODS, sep=None, engine='python')
+            df_extra['Codigo'] = df_extra['Codigo'].astype(str).str.strip()
+            df_base = pd.concat([df_base, df_extra], ignore_index=True)
+        except:
+            pass
+    return df_base.drop_duplicates(subset=['Codigo'])
 
 # --- 2. SEGURIDAD ---
 credentials = {"usernames": {
@@ -93,49 +84,45 @@ if st.session_state["authentication_status"]:
     authenticator.logout('Cerrar Sesión', 'sidebar')
     df_base = cargar_base_completa()
     
-    # LECTURA INTELIGENTE (Detecta si es coma o punto y coma automáticamente)
+    # LEER MOVIMIENTOS (Detecta ; o , automáticamente)
     try:
         df_movs = pd.read_csv(FILE_MOVS, sep=None, engine='python')
-        # Limpiar datos cargados
         df_movs['Codigo'] = df_movs['Codigo'].astype(str).str.strip()
-        if 'Tipo' in df_movs.columns:
-            df_movs['Tipo'] = df_movs['Tipo'].str.strip().str.capitalize()
     except:
         df_movs = pd.DataFrame(columns=['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario'])
 
-    # --- CÁLCULO DE STOCK ACTUAL ---
+    # --- CÁLCULOS ---
     if not df_movs.empty:
         df_movs['Cantidad'] = pd.to_numeric(df_movs['Cantidad'], errors='coerce').fillna(0)
-        df_movs['Entradas'] = df_movs.apply(lambda x: x['Cantidad'] if x['Tipo'] == 'Entrada' else 0, axis=1)
-        df_movs['Salidas'] = df_movs.apply(lambda x: x['Cantidad'] if x['Tipo'] == 'Salida' else 0, axis=1)
+        df_movs['Entradas'] = df_movs.apply(lambda x: x['Cantidad'] if str(x['Tipo']).lower() == 'entrada' else 0, axis=1)
+        df_movs['Salidas'] = df_movs.apply(lambda x: x['Cantidad'] if str(x['Tipo']).lower() == 'salida' else 0, axis=1)
         
-        resumen = df_movs.groupby('Codigo').agg({'Entradas': 'sum', 'Salidas': 'sum'}).reset_index()
+        resumen = df_movs.groupby('Codigo').agg({'Entradas':'sum', 'Salidas':'sum'}).reset_index()
         df_final = pd.merge(df_base, resumen, on='Codigo', how='left').fillna(0)
         df_final['Stock_Actual'] = df_final['Stock_Inicial'] + df_final['Entradas'] - df_final['Salidas']
     else:
         df_final = df_base.copy()
         df_final['Entradas'], df_final['Salidas'], df_final['Stock_Actual'] = 0, 0, df_final['Stock_Inicial']
 
-    # --- INTERFAZ ---
-    tab1, tab2, tab3 = st.tabs(["📋 Gestión de Stock", "📈 Análisis Contable", "⚙️ Correcciones"])
+    # --- PESTAÑAS ---
+    tab1, tab2, tab3 = st.tabs(["📋 Gestión de Stock", "📊 Reportes", "⚙️ Correcciones"])
 
     with tab1:
-        st.subheader(f"Inventario y Movimientos | {st.session_state['name']}")
+        st.subheader(f"Inventario Planta | {st.session_state['name']}")
         
-        # TABLA DE ACTIVIDAD SOLICITADA
-        st.markdown("### 🔍 Resumen de Productos con Movimientos")
+        # TABLA DE ACTIVIDAD (REQUERIDA)
+        st.markdown("### 🔍 Productos con Movimientos Recientes")
         df_actividad = df_final[(df_final['Entradas'] > 0) | (df_final['Salidas'] > 0)].copy()
-        
         if not df_actividad.empty:
             st.dataframe(df_actividad[['Codigo', 'Producto', 'Stock_Inicial', 'Entradas', 'Salidas', 'Stock_Actual']], 
                          use_container_width=True, hide_index=True)
         else:
-            st.warning(f"No se detectaron movimientos en el archivo cargado ({FILE_MOVS}).")
+            st.info("No hay movimientos registrados en este archivo aún.")
 
         st.divider()
-
+        
         # REGISTRO
-        with st.expander("➕ REGISTRAR MOVIMIENTOS", expanded=True):
+        with st.expander("➕ REGISTRAR MOVIMIENTO", expanded=True):
             df_base['L'] = df_base['Codigo'].astype(str) + " | " + df_base['Producto']
             sel = st.multiselect("Seleccionar productos:", df_base['L'])
             if sel:
@@ -154,26 +141,46 @@ if st.session_state["authentication_status"]:
                                            'Tipo': tipo, 'Cantidad': float(st.session_state[f"val_{cid}"]),
                                            'Unidad': df_base[df_base['Codigo'] == cid]['Unidad'].values[0],
                                            'Usuario': st.session_state['username']})
-                        # Guardamos limpiando columnas temporales
-                        pd.concat([df_movs.drop(columns=['Entradas','Salidas'], errors='ignore'), pd.DataFrame(nuevos)], ignore_index=True).to_csv(FILE_MOVS, index=False)
-                        st.cache_data.clear(); st.success("¡Datos guardados!"); st.rerun()
+                        # Guardar manteniendo el formato original
+                        df_updated = pd.concat([df_movs.drop(columns=['Entradas','Salidas'], errors='ignore'), pd.DataFrame(nuevos)], ignore_index=True)
+                        df_updated.to_csv(FILE_MOVS, index=False, sep=';')
+                        st.cache_data.clear(); st.success("¡Guardado!"); st.rerun()
 
-        # HISTORIAL
-        st.markdown("### 📑 Historial Completo de Movimientos")
+        # HISTORIAL COMPLETO
+        st.markdown("### 📑 Historial de todos los Movimientos")
+        bus_h = st.text_input("Filtrar historial:")
         if not df_movs.empty:
-            st.dataframe(df_movs[['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario']].sort_index(ascending=False), use_container_width=True, hide_index=True)
+            df_h = df_movs[['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario']].copy()
+            if bus_h:
+                df_h = df_h[df_h.apply(lambda r: bus_h.lower() in str(r).lower(), axis=1)]
+            st.dataframe(df_h.sort_index(ascending=False), use_container_width=True, hide_index=True)
 
     with tab2:
-        st.markdown("### 📊 Reportes y Descargas")
+        st.markdown("### 📊 Análisis de Stock")
         if not df_movs.empty:
             fig = px.bar(df_movs.groupby(['Producto', 'Tipo'])['Cantidad'].sum().reset_index(), 
                          x='Producto', y='Cantidad', color='Tipo', barmode='group')
             st.plotly_chart(fig, use_container_width=True)
-            
-            c1, c2 = st.columns(2)
-            c1.download_button("📥 Descargar Inventario Excel", data=to_excel(df_final), file_name="Inventario_Final.xlsx")
-            c2.download_button("📥 Descargar Kardex Excel", data=to_excel(df_movs), file_name="Kardex_Completo.xlsx")
+        
+        c1, c2 = st.columns(2)
+        c1.download_button("📥 Descargar Stock Actual (.xlsx)", data=to_excel(df_final), file_name="Inventario_Tippytea.xlsx")
+        c2.download_button("📥 Descargar Kardex (.xlsx)", data=to_excel(df_movs), file_name="Historial_Kardex.xlsx")
 
     with tab3:
-        st.subheader("⚙️ Correcciones")
-        # Mantener funciones de corrección del código anterior...
+        st.subheader("⚙️ Panel de Correcciones")
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("#### ✨ Producto Nuevo")
+            with st.form("n_p"):
+                nc, nn = st.text_input("Código"), st.text_input("Nombre")
+                nu = st.selectbox("Unidad", ["gr", "uni", "kg", "ml"])
+                ns = st.number_input("Stock Inicial", min_value=0.0)
+                if st.form_submit_button("Crear"):
+                    df_ex = pd.read_csv(FILE_EXTRA_PRODS, sep=None, engine='python') if os.path.exists(FILE_EXTRA_PRODS) else pd.DataFrame()
+                    pd.concat([df_ex, pd.DataFrame([{'Codigo':nc,'Producto':nn,'Unidad':nu,'Stock_Inicial':ns}])], ignore_index=True).to_csv(FILE_EXTRA_PRODS, index=False, sep=';')
+                    st.cache_data.clear(); st.rerun()
+        
+        if st.button("🗑️ DESHACER ÚLTIMA CARGA"):
+            if not df_movs.empty:
+                df_movs.drop(df_movs.index[-1]).drop(columns=['Entradas','Salidas'], errors='ignore').to_csv(FILE_MOVS, index=False, sep=';')
+                st.cache_data.clear(); st.rerun()
