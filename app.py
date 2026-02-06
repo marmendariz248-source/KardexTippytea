@@ -5,16 +5,23 @@ from datetime import datetime
 import os
 import plotly.express as px
 import io
+import glob
 
 # --- 1. CONFIGURACIÓN ---
-st.set_page_config(page_title="Tippytea | Kardex", layout="wide", page_icon="🍵")
+st.set_page_config(page_title="Tippytea | Kardex Pro", layout="wide", page_icon="🍵")
 
-FILE_MOVS = "movimientos_kardex.csv"
-FILE_MOVS_ALT = "Copia de movimientos_kardex.csv" # Por si acaso no se renombró en GitHub
+# Intentamos encontrar el archivo de movimientos sin importar el nombre exacto
+def encontrar_archivo_movimientos():
+    posibles = glob.glob("*movimientos*.csv")
+    if posibles:
+        return posibles[0] # Retorna el primero que encuentre
+    return "movimientos_kardex.csv"
+
+FILE_MOVS = encontrar_archivo_movimientos()
 FILE_EXTRA_PRODS = "productos_extra.csv"
 
 def inicializar_archivos():
-    if not os.path.exists(FILE_MOVS) and not os.path.exists(FILE_MOVS_ALT):
+    if not os.path.exists(FILE_MOVS):
         pd.DataFrame(columns=['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario']).to_csv(FILE_MOVS, index=False)
     if not os.path.exists(FILE_EXTRA_PRODS):
         pd.DataFrame(columns=['Codigo', 'Producto', 'Unidad', 'Stock_Inicial']).to_csv(FILE_EXTRA_PRODS, index=False)
@@ -51,10 +58,12 @@ def cargar_base_completa():
         
         df_base.columns = ['Codigo', 'Producto', 'Unidad', 'Stock_Inicial']
         df_base['Stock_Inicial'] = df_base['Stock_Inicial'].apply(limpiar_monto)
+        df_base['Codigo'] = df_base['Codigo'].astype(str).str.strip()
         df_base = df_base.dropna(subset=['Producto'])
 
     if os.path.exists(FILE_EXTRA_PRODS):
         df_extra = pd.read_csv(FILE_EXTRA_PRODS)
+        df_extra['Codigo'] = df_extra['Codigo'].astype(str).str.strip()
         df_base = pd.concat([df_base, df_extra], ignore_index=True)
     return df_base
 
@@ -77,18 +86,19 @@ if st.session_state["authentication_status"]:
     authenticator.logout('Cerrar Sesión', 'sidebar')
     df_base = cargar_base_completa()
     
-    # LECTURA INTELIGENTE DEL ARCHIVO (Detección de copia y separadores)
-    target_file = FILE_MOVS if os.path.exists(FILE_MOVS) else FILE_MOVS_ALT
+    # Lectura del historial detectando separadores automáticamente
     try:
-        df_movs = pd.read_csv(target_file, sep=None, engine='python')
+        df_movs = pd.read_csv(FILE_MOVS, sep=None, engine='python')
+        df_movs['Codigo'] = df_movs['Codigo'].astype(str).str.strip()
+        df_movs['Tipo'] = df_movs['Tipo'].str.strip().str.capitalize()
     except:
         df_movs = pd.DataFrame(columns=['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario'])
 
-    # --- PROCESAMIENTO ---
+    # --- CÁLCULO DE KARDEX ---
     if not df_movs.empty:
         df_movs['Cantidad'] = pd.to_numeric(df_movs['Cantidad'], errors='coerce').fillna(0)
-        df_movs['Entradas'] = df_movs.apply(lambda x: x['Cantidad'] if str(x['Tipo']).strip() == 'Entrada' else 0, axis=1)
-        df_movs['Salidas'] = df_movs.apply(lambda x: x['Cantidad'] if str(x['Tipo']).strip() == 'Salida' else 0, axis=1)
+        df_movs['Entradas'] = df_movs.apply(lambda x: x['Cantidad'] if x['Tipo'] == 'Entrada' else 0, axis=1)
+        df_movs['Salidas'] = df_movs.apply(lambda x: x['Cantidad'] if x['Tipo'] == 'Salida' else 0, axis=1)
         
         resumen = df_movs.groupby('Codigo').agg({'Entradas': 'sum', 'Salidas': 'sum'}).reset_index()
         df_final = pd.merge(df_base, resumen, on='Codigo', how='left').fillna(0)
@@ -100,29 +110,31 @@ if st.session_state["authentication_status"]:
     tab1, tab2, tab3 = st.tabs(["📋 Gestión de Stock", "📈 Análisis Contable", "⚙️ Correcciones"])
 
     with tab1:
-        st.subheader(f"Panel de Control - {st.session_state['name']}")
+        st.subheader(f"Inventario Tippytea - {st.session_state['name']}")
         
-        # TABLA DE PRODUCTOS CON MOVIMIENTOS (LO QUE PEDISTE)
-        st.markdown("### 🔍 Productos con Actividad")
-        df_solo_movs = df_final[(df_final['Entradas'] > 0) | (df_final['Salidas'] > 0)].copy()
-        if not df_solo_movs.empty:
-            st.dataframe(df_solo_movs[['Codigo', 'Producto', 'Stock_Inicial', 'Entradas', 'Salidas', 'Stock_Actual']], 
+        # 1. TABLA RESUMEN DE MOVIMIENTOS (LO QUE PEDISTE)
+        st.markdown("### 🔍 Resumen de Movimientos y Stock Final")
+        # Filtramos para mostrar solo los que tienen alguna actividad
+        df_actividad = df_final[(df_final['Entradas'] > 0) | (df_final['Salidas'] > 0)].copy()
+        
+        if not df_actividad.empty:
+            st.dataframe(df_actividad[['Codigo', 'Producto', 'Stock_Inicial', 'Entradas', 'Salidas', 'Stock_Actual']], 
                          use_container_width=True, hide_index=True)
         else:
-            st.warning("No se detectan productos con movimientos en el archivo actual.")
+            st.warning(f"No se detectaron movimientos en el archivo: {FILE_MOVS}. Asegúrate de que el nombre sea correcto.")
 
         st.divider()
-        
-        # INVENTARIO COMPLETO
-        with st.expander("🏬 Ver Inventario Completo (Todos los productos)"):
-            bus_inv = st.text_input("Buscar en todo el inventario:")
-            df_full = df_final[['Codigo', 'Producto', 'Unidad', 'Stock_Actual']]
+
+        # 2. BUSCADOR DE INVENTARIO COMPLETO
+        with st.expander("🏬 Ver Inventario Completo / Stock Inicial"):
+            bus_inv = st.text_input("Buscar producto:")
+            df_full = df_final[['Codigo', 'Producto', 'Unidad', 'Stock_Inicial', 'Stock_Actual']]
             if bus_inv:
                 df_full = df_full[df_full.apply(lambda r: bus_inv.lower() in str(r).lower(), axis=1)]
             st.dataframe(df_full, use_container_width=True, hide_index=True)
 
-        # REGISTRO
-        with st.expander("➕ REGISTRAR MOVIMIENTO", expanded=True):
+        # 3. REGISTRO DE MOVIMIENTOS
+        with st.expander("➕ REGISTRAR MOVIMIENTOS", expanded=True):
             df_base['L'] = df_base['Codigo'].astype(str) + " | " + df_base['Producto']
             sel = st.multiselect("Seleccionar productos:", df_base['L'])
             if sel:
@@ -133,7 +145,7 @@ if st.session_state["authentication_status"]:
                     for s in sel:
                         cid = s.split(" | ")[0]
                         st.number_input(f"Cantidad para {s.split(' | ')[1]}:", key=f"val_{cid}", min_value=0.0)
-                    if st.form_submit_button("Guardar y Actualizar Inventario"):
+                    if st.form_submit_button("Guardar y Actualizar"):
                         nuevos = []
                         for s in sel:
                             cid = s.split(" | ")[0]
@@ -141,11 +153,20 @@ if st.session_state["authentication_status"]:
                                            'Tipo': tipo, 'Cantidad': float(st.session_state[f"val_{cid}"]),
                                            'Unidad': df_base[df_base['Codigo'] == cid]['Unidad'].values[0],
                                            'Usuario': st.session_state['username']})
-                        pd.concat([df_movs, pd.DataFrame(nuevos)], ignore_index=True).to_csv(FILE_MOVS, index=False)
-                        st.cache_data.clear(); st.success("Inventario Actualizado!"); st.rerun()
+                        pd.concat([df_movs.drop(columns=['Entradas','Salidas'], errors='ignore'), pd.DataFrame(nuevos)], ignore_index=True).to_csv(FILE_MOVS, index=False)
+                        st.cache_data.clear(); st.success("¡Guardado!"); st.rerun()
+
+        # 4. HISTORIAL DE MOVIMIENTOS ANTERIORES
+        st.markdown("### 📑 Historial de Movimientos Anteriores")
+        bus_hist = st.text_input("🔍 Buscar en historial (Fecha, Producto o Usuario):")
+        if not df_movs.empty:
+            df_h = df_movs[['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario']].copy()
+            if bus_hist:
+                df_h = df_h[df_h.apply(lambda r: bus_hist.lower() in str(r).lower(), axis=1)]
+            st.dataframe(df_h.sort_index(ascending=False), use_container_width=True, hide_index=True)
 
     with tab2:
-        st.markdown("### 📊 Reportes para Jenny")
+        st.markdown("### 📊 Gráficos y Reportes")
         if not df_movs.empty:
             fig = px.bar(df_movs.groupby(['Producto', 'Tipo'])['Cantidad'].sum().reset_index(), 
                          x='Producto', y='Cantidad', color='Tipo', barmode='group',
@@ -153,12 +174,11 @@ if st.session_state["authentication_status"]:
             st.plotly_chart(fig, use_container_width=True)
             
             c1, c2 = st.columns(2)
-            c1.download_button("📥 Inventario Actualizado (.xlsx)", data=to_excel(df_final), file_name="Inventario.xlsx")
-            c2.download_button("📥 Kardex Histórico (.xlsx)", data=to_excel(df_movs), file_name="Kardex.xlsx")
+            c1.download_button("📥 Descargar Inventario Actualizado", data=to_excel(df_final), file_name="Inventario_Final.xlsx")
+            c2.download_button("📥 Descargar Kardex de Movimientos", data=to_excel(df_movs), file_name="Kardex_Movimientos.xlsx")
 
     with tab3:
         st.subheader("⚙️ Panel de Correcciones")
-        # Aquí se mantiene la lógica de agregar producto y editar registros del código anterior
         c1, c2 = st.columns(2)
         with c1:
             st.markdown("#### ✨ Producto Nuevo")
@@ -169,16 +189,22 @@ if st.session_state["authentication_status"]:
                 if st.form_submit_button("Crear"):
                     df_ex = pd.read_csv(FILE_EXTRA_PRODS)
                     pd.concat([df_ex, pd.DataFrame([{'Codigo':nc,'Producto':nn,'Unidad':nu,'Stock_Inicial':ns}])], ignore_index=True).to_csv(FILE_EXTRA_PRODS, index=False)
-                    st.cache_data.clear(); st.rerun()
+                    st.cache_data.clear(); st.success("Creado"); st.rerun()
         with c2:
-            st.markdown("#### 🛠️ Editar Historial")
+            st.markdown("#### 🛠️ Editar Últimos Registros")
             if not df_movs.empty:
                 df_movs['Label'] = df_movs.index.astype(str) + " - " + df_movs['Producto']
-                sel_edit = st.selectbox("Registro:", df_movs['Label'])
+                sel_edit = st.selectbox("Seleccione para corregir:", df_movs['Label'].tail(20))
                 idx = int(sel_edit.split(" - ")[0])
                 with st.form("e_f"):
-                    new_c = st.number_input("Cantidad", value=float(df_movs.iloc[idx]['Cantidad']))
-                    if st.form_submit_button("Actualizar"):
+                    new_c = st.number_input("Cantidad Correcta", value=float(df_movs.iloc[idx]['Cantidad']))
+                    if st.form_submit_button("Corregir Ahora"):
                         df_movs.at[idx, 'Cantidad'] = new_c
-                        df_movs.drop(columns=['Label']).to_csv(FILE_MOVS, index=False)
-                        st.rerun()
+                        df_movs.drop(columns=['Label','Entradas','Salidas'], errors='ignore').to_csv(FILE_MOVS, index=False)
+                        st.cache_data.clear(); st.success("Corregido"); st.rerun()
+
+        st.divider()
+        if st.button("🗑️ ELIMINAR ÚNICAMENTE EL ÚLTIMO REGISTRO (Deshacer)"):
+            if not df_movs.empty:
+                df_movs.drop(df_movs.index[-1]).drop(columns=['Entradas','Salidas'], errors='ignore').to_csv(FILE_MOVS, index=False)
+                st.cache_data.clear(); st.warning("Último movimiento eliminado."); st.rerun()
