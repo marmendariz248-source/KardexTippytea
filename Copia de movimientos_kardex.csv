@@ -1,0 +1,369 @@
+﻿Fecha;Codigo;Producto;Tipo;Cantidad;Unidad;Usuario;Ajuste
+2026-02-03;004-000-00401;Azucar;Salida;9000;gr;martin_admin;-9000
+2026-02-03;004-000-00399;Alginato Japones;Salida;420;gr;martin_admin;-420
+2026-02-03;004-000-00407;Glucosa;Salida;15000;gr;martin_admin;-15000
+2026-02-03;004-000-00408;Cloruro;Salida;9;gr;martin_admin;-9
+2026-02-03;004-000-00362;Saborizante Manzana Verde;Salida;30;gr;jennys_contabilidad;-30
+2026-02-03;004-000-00400;Benzoato;Salida;60;gr;jennys_contabilidad;-60
+2026-02-03;004-000-00403;Acido Citrico;Salida;18;gr;jennys_contabilidad;-18
+2026-02-03;004-000-00405;Sorbato De Potasio;Salida;84;gr;jennys_contabilidad;-84
+2026-02-03;004-000-00398;Gluconolactato Top Trading;Salida;1200;gr;jennys_contabilidad;-1200
+2026-02-03;004-000-00404;Goma Xhantan;Salida;75;gr;jennys_contabilidad;-75
+2026-02-03;004-000-00406;Goma Guar;Salida;135;gr;jennys_contabilidad;-135
+2026-02-03;004-000-00125;Maltodextrina;Salida;2051;gr;jennys_contabilidad;-2051
+2026-02-03;004-000-00401;Azucar;Salida;25000;gr;jennys_contabilidad;-25000
+2026-02-03;004-000-00302;Extracto Te Negro Adiqmat;Salida;200;gr;jennys_contabilidad;-200
+2026-02-03;004-000-00275;Chai Aditmaq;Salida;251;gr;jennys_contabilidad;-251
+2026-02-03;004-000-00303;Fosfato Tricalcio;Salida;6;gr;jennys_contabilidad;-6
+2026-02-03;004-000-00235;Rosas Rojas Aromas;Salida;427;gr;jennys_contabilidad;-427
+2026-02-03;003-001-00097;Blends Divine Tea;Salida;251;gr;jennys_contabilidad;-251
+2026-02-03;003-001-00190;Blends Puerh Caramelo;Salida;250;gr;jennys_contabilidad;-250
+2026-02-03;003-001-00124;Blends Vainilla Chai;Salida;229;gr;jennys_contabilidad;-229
+2026-02-03;003-001-00324;Blends Berry Berry;Salida;804;gr;jennys_contabilidad;-804
+2026-02-03;005-000-00223;Pads Hierbabuena;Salida;100;uni;jennys_contabilidad;-100
+2026-02-03;003-001-00178;Blends Te Verde;Salida;1190;gr;jennys_contabilidad;-1190
+2026-02-03;001-001-00066;Naranja En Rodaja Arbori;Salida;34;gr;jennys_contabilidad;-34
+2026-02-03;001-001-00052;Pina En Rodaja Arbori;Salida;70;gr;jennys_contabilidad;-70
+2026-02-03;004-000-00188;Manzana Rodajas Roberto Baldeon;Salida;68;gr;jennys_contabilidad;-68
+2026-02-03;003-019-002-00008;Botella 300 Ml Rooibos & Mango;Salida;12;uni;jennys_contabilidad;-12
+2026-02-03;003-019-002-00005;Botella 300ml  Te Blanco & Rosas;Salida;12;uni;jennys_contabilidad;-12
+2026-02-03;003-019-002-00007;Botella 300 Ml Te Negro & Limon;Salida;12;uni;jennys_contabilidad;-12
+2026-02-03;001-003-00104;Doypac Vacio;Salida;12;uni;jennys_contabilidad;-12
+2026-02-03;001-003-00001;Latas Xl (Grande);Salida;113;uni;jennys_contabilidad;-113
+2026-02-03;001-003-00343;Tapa Lata Xl;Salida;113;uni;jennys_contabilidad;-113
+2026-02-03;003-026-00041;Cuchara Metalica;Salida;10;uni;jennys_contabilidad;-10
+2026-02-03;003-026-00014;Infusor Bola Malla;Salida;10;uni;jennys_contabilidad;-10
+2026-02-03;001-003-00130;Etiquetas Latas Berry Berry Amarillas Delgada;Salida;10;uni;jennys_contabilidad;-10
+2026-02-03;001-003-00129;Etiquetas Latas Amarillas Delgada;Salida;103;uni;jennys_contabilidad;-103
+2026-02-03;001-003-00098;Tea Collection Base Azul;Salida;1;uni;jennys_contabilidad;-1
+2026-02-03;001-003-00097;Tea Collection Tapa Transparente;Salida;1;uni;jennys_contabilidad;-1
+2026-02-03;001-003-00033;Tea Collection Caja Amarilla;Salida;1;uni;jennys_contabilidad;-1
+2026-02-03;003-014-00003;Funda Pequeña Café Shopping Bag;Salida;139;uni;jennys_contabilidad;-139
+2026-02-03;001-003-00286;Funda Grande Cafe Chopping Bag;Salida;45;uni;jennys_contabilidad;-45
+2026-02-03;001-003-00035;Vaso Degustación;Salida;100;uni;jennys_contabilidad;-100
+2026-02-03;001-003-00163;Cartones 178314 (71 Cajas Grandes);Salida;8;uni;jennys_contabilidad;-8
+2026-02-03;001-003-00101;Caja Aromatica Vacia;Salida;51;uni;jennys_contabilidad;-51
+2026-02-03;001-003-00115;Etiquetas Aromaticas Cedron;Salida;5;uni;jennys_contabilidad;-5
+2026-02-03;001-003-00118;Etiquetas Aromaticas Hierbabuena;Salida;5;uni;jennys_contabilidad;-5
+2026-02-03;001-003-00119;Etiquetas Aromaticas Hierbaluisa;Salida;5;uni;jennys_contabilidad;-5
+2026-02-03;004-000-00254;Te Negro Kemuun Importado;Salida;1587;gr;jennys_contabilidad;-1587
+2026-02-03;004-000-00211;Te Negro Bolita Cetca;Salida;254;gr;jennys_contabilidad;-254
+2026-02-03;004-000-00330;Saborizante Bergamota Florarom;Salida;381;gr;jennys_contabilidad;-381
+2026-02-03;004-000-00331;Saborizante Bergamota Magic;Salida;55;gr;jennys_contabilidad;-55
+2026-02-03;004-000-00325;Saborizante Advance Natural;Salida;17;gr;jennys_contabilidad;-17
+2026-02-03;001-003-00069;Funda Tisana Naranja;Salida;500;uni;jennys_contabilidad;-500
+2026-02-03;005-000-00049;Blends Tisana Naranja;Salida;50;gr;jennys_contabilidad;-50
+2026-02-03;005-000-00047;Blends Tisana Frutos Rojos;Salida;149;gr;jennys_contabilidad;-149
+2026-02-03;003-001-00153;Blends Lucky Mango;Entrada;800;gr;jennys_contabilidad;800
+2026-02-03;005-000-00038;Blends Sakura Cherry;Entrada;866;gr;jennys_contabilidad;866
+2026-02-03;003-001-00324;Blends Berry Berry;Salida;402;gr;jennys_contabilidad;-402
+2026-02-03;003-001-00137;Blends Golden Rooibos;Salida;153;gr;jennys_contabilidad;-153
+2026-02-03;003-001-00110;Blends Orange Cocoa;Salida;254;gr;jennys_contabilidad;-254
+2026-02-03;003-001-00108;Blends Lapsang Souchong;Salida;152;gr;jennys_contabilidad;-152
+2026-02-03;003-001-00096;Blends Detox Locales;Salida;152;gr;jennys_contabilidad;-152
+2026-02-03;003-001-00186;Blends Delta Night;Salida;111;gr;jennys_contabilidad;-111
+2026-02-03;003-001-00182;Blends Moon Cycle;Salida;150;gr;jennys_contabilidad;-150
+2026-02-03;005-000-00125;Blends Digestive;Salida;153;gr;jennys_contabilidad;-153
+2026-02-03;001-003-00033;Tea Collection Caja Amarilla;Salida;16;uni;jennys_contabilidad;-16
+2026-02-03;001-003-00098;Tea Collection Base Azul;Salida;16;uni;jennys_contabilidad;-16
+2026-02-03;001-003-00097;Tea Collection Tapa Transparente;Salida;16;uni;jennys_contabilidad;-16
+2026-02-03;001-003-00034;Tapa Lata Pequeña;Salida;60;uni;jennys_contabilidad;-60
+2026-02-03;003-001-00208;Latita Black Velvet;Salida;131;uni;jennys_contabilidad;-131
+2026-02-03;003-001-00206;Latita Aqua Rosa;Salida;37;uni;jennys_contabilidad;-37
+2026-02-03;003-001-00205;Latita Blueberry Temptation;Salida;151;uni;jennys_contabilidad;-151
+2026-02-03;003-021-00061;Piramides Berry Berry;Salida;171;uni;jennys_contabilidad;-171
+2026-02-03;001-003-00164;Cartones 178314 (61);Salida;6;uni;jennys_contabilidad;-6
+2026-02-03;005-000-00162;Piramide Hierbaluisa;Salida;21;uni;jennys_contabilidad;-21
+2026-02-03;001-003-00073;Rollos Para Sachets Nuevos Amarillos Tippytea;Salida;687;uni;jennys_contabilidad;-687
+2026-02-03;003-001-00093;Blends Casablanca;Salida;78;gr;jennys_contabilidad;-78
+2026-02-03;003-001-00206;Latita Aqua Rosa;Salida;15;uni;jennys_contabilidad;-15
+2026-02-03;003-001-00205;Latita Blueberry Temptation;Salida;15;uni;jennys_contabilidad;-15
+2026-02-03;003-001-00207;Latita Sakura  Cherry;Salida;15;uni;jennys_contabilidad;-15
+2026-02-03;003-001-00208;Latita Black Velvet;Salida;15;uni;jennys_contabilidad;-15
+2026-02-03;004-000-00383;Saborizante Mango Viche;Salida;49;gr;jennys_contabilidad;-49
+2026-02-03;004-000-00187;Mango En Trozos Roberto Baldeon;Salida;178;gr;jennys_contabilidad;-178
+2026-02-03;004-000-00335;Saborizante Fresa Natural;Salida;85;gr;jennys_contabilidad;-85
+2026-02-03;004-000-00313;Saborizante Rosas;Salida;35;gr;jennys_contabilidad;-35
+2026-02-03;001-001-00050;Remolacha En Cubo Arbori;Salida;73;gr;jennys_contabilidad;-73
+2026-02-03;001-003-00166;Cartones 188399 (51 );Salida;5;uni;jennys_contabilidad;-5
+2026-02-03;001-003-00165;Cartones 189771 (81 );Salida;3;uni;jennys_contabilidad;-3
+2026-02-03;004-000-00251;Te Verde Importado;Salida;1700;gr;jennys_contabilidad;-1700
+2026-02-03;005-000-00047;Blends Tisana Frutos Rojos;Salida;401;gr;jennys_contabilidad;-401
+2026-02-03;005-000-00048;Blends Tisana Manzana;Salida;742;gr;jennys_contabilidad;-742
+2026-02-03;003-021-00083;Piramides Earl Grey;Salida;32;uni;jennys_contabilidad;-32
+2026-02-03;005-000-00069;Blends Cosmic;Salida;256;gr;jennys_contabilidad;-256
+2026-02-03;004-000-00250;Matcha Culinario Importado;Salida;2872;gr;jennys_contabilidad;-2872
+2026-02-03;001-001-00027;Matcha Latte Mix 1kg;Salida;1000;gr;jennys_contabilidad;-1000
+2026-02-03;003-021-00092;Piramides Te Verde;Salida;6;uni;jennys_contabilidad;-6
+2026-02-03;003-021-00077;Piramides Lemon Ginger;Salida;27;uni;jennys_contabilidad;-27
+2026-02-03;003-021-00109;Piramides Lucky Mango;Salida;5;uni;jennys_contabilidad;-5
+2026-02-03;003-021-00095;Piramides Chamomile;Salida;26;uni;jennys_contabilidad;-26
+2026-02-03;003-021-00318;Piramide Manzanilla;Salida;47;uni;jennys_contabilidad;-47
+2026-02-03;005-000-00104;Blends Manzanilla Y Miel;Entrada;730;gr;jennys_contabilidad;730
+2026-02-03;004-000-00229;Butterfly Turucucho;Salida;494;gr;jennys_contabilidad;-494
+2026-02-03;001-001-00030;Manzana En Cubo Roberto Baldeon;Salida;387;gr;jennys_contabilidad;-387
+2026-02-03;004-000-00248;Jamaica Importada;Salida;329;gr;jennys_contabilidad;-329
+2026-02-03;004-000-00186;Mandarina Roberto Baldeon;Salida;272;gr;jennys_contabilidad;-272
+2026-02-03;004-000-00366;Saborizante Canela;Salida;207;gr;jennys_contabilidad;-207
+2026-02-03;001-001-00012;Stevia En Hoja Ile;Salida;62;gr;jennys_contabilidad;-62
+2026-02-03;001-003-00001;Latas Xl (Grande);Salida;48;uni;jennys_contabilidad;-48
+2026-02-03;001-003-00343;Tapa Lata Xl;Salida;55;uni;jennys_contabilidad;-55
+2026-02-03;001-003-00084;Rollos Tippytea;Salida;5000;uni;jennys_contabilidad;-5000
+2026-02-03;003-021-00089;Piramides Strawberry Green Tea;Salida;120;uni;jennys_contabilidad;-120
+2026-02-03;003-021-00095;Piramides Chamomile;Salida;100;uni;jennys_contabilidad;-100
+2026-02-03;003-021-00092;Piramides Te Verde;Salida;100;uni;jennys_contabilidad;-100
+2026-02-03;003-021-00254;Piramides Sachet Manzanilla;Salida;13;uni;jennys_contabilidad;-13
+2026-02-03;003-021-00241;Piramides Sachet Lemon Ginger;Salida;45;uni;jennys_contabilidad;-45
+2026-02-03;003-021-00242;Piramides Sachet Chamomile;Salida;6;uni;jennys_contabilidad;-6
+2026-02-03;004-000-00188;Manzana Rodajas Roberto Baldeon;Salida;193;gr;jennys_contabilidad;-193
+2026-02-03;004-000-00240;Cedron Aromas;Salida;160;gr;jennys_contabilidad;-160
+2026-02-03;004-000-00139;Anis Pequeno Dona Janna;Salida;160;gr;jennys_contabilidad;-160
+2026-02-03;004-000-00218;Hierbaluisa Martha;Salida;360;gr;jennys_contabilidad;-360
+2026-02-03;004-000-00239;Toronjil Aromas;Salida;160;gr;jennys_contabilidad;-160
+2026-02-03;004-000-00217;Guayusa Verde Martha;Salida;360;gr;jennys_contabilidad;-360
+2026-02-03;004-000-00245;Menta Pucara;Salida;160;gr;jennys_contabilidad;-160
+2026-02-03;005-000-00104;Blends Manzanilla Y Miel;Salida;160;gr;jennys_contabilidad;-160
+2026-02-03;001-003-00115;Etiquetas Aromaticas Cedron;Salida;4;uni;jennys_contabilidad;-4
+2026-02-03;001-003-00114;Etiquetas Aromaticas Anis;Salida;4;uni;jennys_contabilidad;-4
+2026-02-03;001-003-00116;Etiquetas Aromaticas Flores De Manzanilla;Salida;4;uni;jennys_contabilidad;-4
+2026-02-03;001-003-00119;Etiquetas Aromaticas Hierbaluisa;Salida;4;uni;jennys_contabilidad;-4
+2026-02-03;001-003-00118;Etiquetas Aromaticas Hierbabuena;Salida;4;uni;jennys_contabilidad;-4
+2026-02-03;001-003-00122;Etiquetas Aromaticas Toronjil;Salida;4;uni;jennys_contabilidad;-4
+2026-02-03;001-003-00117;Etiquetas Aromaticas Guayusa;Salida;4;uni;jennys_contabilidad;-4
+2026-02-03;001-003-00121;Etiquetas Aromaticas Menta;Salida;4;uni;jennys_contabilidad;-4
+2026-02-03;001-003-00343;Tapa Lata Xl;Salida;3;uni;jennys_contabilidad;-3
+2026-02-03;001-003-00130;Etiquetas Latas Berry Berry Amarillas Delgada;Salida;1;uni;jennys_contabilidad;-1
+2026-02-03;001-003-00149;Etiquetas Latas Strawberry Amarilla Delgada;Salida;1;uni;jennys_contabilidad;-1
+2026-02-03;001-003-00147;Etiquetas Latas Lemon Ginger Amarilla Delgada;Salida;1;uni;jennys_contabilidad;-1
+2026-02-03;003-001-00104;Blends Lemon Ginger;Salida;524;gr;jennys_contabilidad;-524
+2026-02-03;001-003-00120;Etiquetas Aromaticas Manzanilla Y Miel;Salida;0;uni;jennys_contabilidad;0
+2026-02-03;001-003-00120;Etiquetas Aromaticas Manzanilla Y Miel;Salida;4;uni;jennys_contabilidad;-4
+2026-02-03;001-003-00102;Caja Aromatica Flores De Manzanilla;Salida;224;uni;jennys_contabilidad;-224
+2026-02-03;001-003-00103;Caja Aromatica Hierbabuena;Salida;485;uni;jennys_contabilidad;-485
+2026-02-03;004-000-00452;Funda Matcha Culinario;Salida;240;uni;jennys_contabilidad;-240
+2026-02-03;001-003-00112;Funda Amarilla 100 Gr Te Negro Y Limon;Salida;120;uni;jennys_contabilidad;-120
+2026-02-03;001-003-00107;Doypac Berry Berry;Salida;240;uni;jennys_contabilidad;-240
+2026-02-03;004-000-00233;Hierbabuena Aromas;Salida;0;gr;jennys_contabilidad (Corrigió);0
+2026-02-04;004-000-00173;Jengibre Triturado Ile;Salida;700;gr;jennys_contabilidad;-700
+2026-02-04;004-000-00174;Jengibre Polvo Ile;Salida;60;gr;jennys_contabilidad;-60
+2026-02-04;001-001-00051;Zanahoria En Cubo Arbori;Salida;2459;gr;jennys_contabilidad;-2459
+2026-02-04;004-000-00202;Uvilla Arbori;Salida;127;gr;jennys_contabilidad;-127
+2026-02-04;001-001-00030;Manzana En Cubo Roberto Baldeon;Salida;450;gr;jennys_contabilidad;-450
+2026-02-04;004-000-00353;Saborizante Pina;Salida;103;gr;jennys_contabilidad;-103
+2026-02-04;004-000-00325;Saborizante Advance Natural;Salida;117;gr;jennys_contabilidad;-117
+2026-02-04;004-000-00249;Matcha Sperior Importado;Salida;50;gr;jennys_contabilidad;-50
+2026-02-04;004-000-00401;Azucar;Salida;35699;gr;jennys_contabilidad;-35699
+2026-02-04;004-000-00302;Extracto Te Negro Adiqmat;Salida;326;gr;jennys_contabilidad;-326
+2026-02-04;004-000-00275;Chai Aditmaq;Salida;100;gr;jennys_contabilidad;-100
+2026-02-04;004-000-00132;Azucar Impalpable Dona Janna;Salida;4000;gr;jennys_contabilidad;-4000
+2026-02-04;004-000-00250;Matcha Culinario Importado;Salida;1000;gr;jennys_contabilidad;-1000
+2026-02-04;004-000-00403;Acido Citrico;Salida;937;gr;jennys_contabilidad;-937
+2026-02-04;004-000-00124;Citrato De Sodio;Salida;525;gr;jennys_contabilidad;-525
+2026-02-04;004-000-00276;Limon Encapsulado Aditmaq;Salida;172;gr;jennys_contabilidad;-172
+2026-02-04;004-000-00394;Colorante Cafe Chocolate;Salida;2;gr;jennys_contabilidad;-2
+2026-02-04;004-000-00126;Stevia En Polvo Florarom;Salida;14;gr;jennys_contabilidad;-14
+2026-02-04;004-000-00303;Fosfato Tricalcio;Salida;32;gr;jennys_contabilidad;-32
+2026-02-04;004-000-00128;Saborizante Polvo Te;Salida;104;gr;jennys_contabilidad;-104
+2026-02-04;004-000-00404;Goma Xhantan;Salida;123;gr;jennys_contabilidad;-123
+2026-02-04;001-003-00003;Fundas Metalizadas;Salida;200;uni;jennys_contabilidad;-200
+2026-02-04;004-000-00125;Maltodextrina;Salida;25;gr;jennys_contabilidad;-25
+2026-02-04;001-001-00049;Saborizante Vainilla En Polvo Florarom;Salida;16;gr;jennys_contabilidad;-16
+2026-02-04;004-000-00314;Saborizante Rosas En Polvo;Salida;50;gr;jennys_contabilidad;-50
+2026-02-04;004-000-00248;Jamaica Importada;Salida;19;gr;jennys_contabilidad;-19
+2026-02-04;004-000-00395;Colorante Rojo Florarom;Salida;5;gr;jennys_contabilidad;-5
+2026-02-04;004-000-00218;Hierbaluisa Martha;Salida;1251;gr;jennys_contabilidad;-1251
+2026-02-04;004-000-00219;Calendula Turucucho;Salida;40;gr;jennys_contabilidad;-40
+2026-02-04;004-000-00262;Butterfly Pea Importado;Salida;310;gr;jennys_contabilidad;-310
+2026-02-04;004-000-00278;Purpurina Plateada Garcia Reinoso;Salida;10;gr;jennys_contabilidad;-10
+2026-02-04;004-000-00317;Saborizante Azar;Salida;106;gr;jennys_contabilidad;-106
+2026-02-04;004-000-00188;Manzana Rodajas Roberto Baldeon;Salida;136;gr;jennys_contabilidad;-136
+2026-02-04;003-001-00098;Blends Earl Grey;Entrada;1944;gr;jennys_contabilidad;1944
+2026-02-04;005-000-00050;Blends Tisana Pina;Entrada;922;gr;jennys_contabilidad;922
+2026-02-04;003-001-00315;Soluble Jamaica Y Limon 1kg;Entrada;366;gr;jennys_contabilidad;366
+2026-02-04;001-003-00073;Rollos Para Sachets Nuevos Amarillos Tippytea;Salida;102;uni;jennys_contabilidad;-102
+2026-02-04;004-000-00277;Hierbaluisa Aylluorganic;Salida;1432;gr;jennys_contabilidad;-1432
+2026-02-04;004-000-00183;Cascara De Limon Roberto Baldeon;Salida;120;gr;jennys_contabilidad;-120
+2026-02-04;004-000-00172;Curcuma Molida O En Polvo Ile;Salida;21;gr;jennys_contabilidad;-21
+2026-02-04;004-000-00210;Polvo Chai Cetca;Salida;197;gr;jennys_contabilidad;-197
+2026-02-04;004-000-00323;Saborizante Limon;Salida;1410;gr;jennys_contabilidad;-1410
+2026-02-04;001-003-00073;Rollos Para Sachets Nuevos Amarillos Tippytea;Salida;126;uni;jennys_contabilidad;-126
+2026-02-04;003-014-00003;Funda Pequeña Café Shopping Bag;Salida;1;uni;jennys_contabilidad;-1
+2026-02-04;004-000-00251;Te Verde Importado;Salida;228;gr;jennys_contabilidad;-228
+2026-02-04;005-000-00102;Blends Cedron Hierbaluisa Lucia;Salida;101;gr;jennys_contabilidad;-101
+2026-02-04;004-000-00245;Menta Pucara;Salida;746;gr;jennys_contabilidad;-746
+2026-02-04;001-003-00060;Funda Zipper Transparente Pequena 5,5x7;Salida;100;uni;jennys_contabilidad;-100
+2026-02-04;001-003-00059;Funda Zipper Transparente Mediana 8x9,5;Salida;100;uni;jennys_contabilidad;-100
+2026-02-04;001-003-00286;Funda Grande Cafe Chopping Bag;Salida;4;uni;jennys_contabilidad;-4
+2026-02-04;003-014-00003;Funda Pequeña Café Shopping Bag;Salida;3;uni;jennys_contabilidad;-3
+2026-02-04;001-003-00073;Rollos Para Sachets Nuevos Amarillos Tippytea;Salida;268;uni;jennys_contabilidad;-268
+2026-02-04;001-003-00108;Funda Amarilla 50 Gr Matcha Culinario;Salida;3;uni;jennys_contabilidad;-3
+2026-02-04;004-000-00250;Matcha Culinario Importado;Salida;158;gr;jennys_contabilidad;-158
+2026-02-04;001-003-00057;Funda Tippytea Amarilla 50gr;Salida;1;uni;jennys_contabilidad;-1
+2026-02-04;003-019-002-00002;Botella 300 Ml Jamaica & Berries;Salida;60;uni;jennys_contabilidad;-60
+2026-02-04;003-019-002-00001;Botella 300 Ml Lemon Ginger;Salida;24;uni;jennys_contabilidad;-24
+2026-02-04;003-019-002-00007;Botella 300 Ml Te Negro & Limon;Salida;12;uni;jennys_contabilidad;-12
+2026-02-04;003-019-002-00008;Botella 300 Ml Rooibos & Mango;Salida;36;uni;jennys_contabilidad;-36
+2026-02-04;001-003-00129;Etiquetas Latas Amarillas Delgada;Salida;2;uni;jennys_contabilidad;-2
+2026-02-04;003-026-00170;Tetera Con Infusor 300 Ml;Salida;3;uni;jennys_contabilidad;-3
+2026-02-04;003-021-00144;Piramides Sachet Te Verde;Entrada;10;uni;jennys_contabilidad;10
+2026-02-04;003-021-00254;Piramides Sachet Manzanilla;Salida;7;uni;jennys_contabilidad;-7
+2026-02-04;003-021-00078;Piramides Manzanilla;Entrada;5;uni;jennys_contabilidad;5
+2026-02-04;003-021-00255;Piramides Sachet Menta;Entrada;15;uni;jennys_contabilidad;15
+2026-02-04;005-000-00155;Piramides Sachet Cedron Hierbaluisa Lucia;Entrada;11;uni;jennys_contabilidad;11
+2026-02-04;003-001-00104;Blends Lemon Ginger;Entrada;1958;gr;jennys_contabilidad;1958
+2026-02-04;005-000-00069;Blends Cosmic;Entrada;1753;gr;jennys_contabilidad;1753
+2026-02-04;004-000-00374;Saborizante Cereza;Salida;438;gr;jennys_contabilidad;-438
+2026-02-04;004-000-00377;Saborizante Mango;Salida;12;gr;jennys_contabilidad;-12
+2026-02-04;004-000-00400;Benzoato;Salida;69;gr;jennys_contabilidad;-69
+2026-02-04;004-000-00403;Acido Citrico;Salida;18;gr;jennys_contabilidad;-18
+2026-02-04;004-000-00405;Sorbato De Potasio;Salida;109;gr;jennys_contabilidad;-109
+2026-02-04;004-000-00398;Gluconolactato Top Trading;Salida;1200;gr;jennys_contabilidad;-1200
+2026-02-04;004-000-00406;Goma Guar;Salida;135;gr;jennys_contabilidad;-135
+2026-02-04;004-000-00407;Glucosa;Salida;15000;gr;jennys_contabilidad;-15000
+2026-02-04;004-000-00408;Cloruro;Salida;9;gr;jennys_contabilidad;-9
+2026-02-04;004-000-00399;Alginato Japones;Salida;525;gr;jennys_contabilidad;-525
+2026-02-04;004-000-00243;Manzanilla Pucara;Salida;220;gr;jennys_contabilidad;-220
+2026-02-04;005-000-00134;Soluble Taro Purple;Salida;50;gr;jennys_contabilidad;-50
+2026-02-04;003-001-00187;Blends Caramel Dragon Fruit;Salida;49;gr;jennys_contabilidad;-49
+2026-02-04;003-001-00122;Blends Strawberry Rose Mint;Salida;49;gr;jennys_contabilidad;-49
+2026-02-05;004-000-00401;Azucar;Salida;6502;gr;jennys_contabilidad;-6502
+2026-02-05;004-000-00403;Acido Citrico;Salida;144;gr;jennys_contabilidad;-144
+2026-02-05;004-000-00124;Citrato De Sodio;Salida;73;gr;jennys_contabilidad;-73
+2026-02-05;004-000-00276;Limon Encapsulado Aditmaq;Salida;36;gr;jennys_contabilidad;-36
+2026-02-05;004-000-00375;Saborizante Cereza En Polvo;Salida;261;gr;jennys_contabilidad;-261
+2026-02-05;004-000-00291;Pitahaya Liofilizada;Salida;231;gr;jennys_contabilidad;-231
+2026-02-05;004-000-00126;Stevia En Polvo Florarom;Salida;5;gr;jennys_contabilidad;-5
+2026-02-05;004-000-00303;Fosfato Tricalcio;Salida;16;gr;jennys_contabilidad;-16
+2026-02-05;001-003-00166;Cartones 188399 (51 );Salida;1;uni;jennys_contabilidad;-1
+2026-02-05;001-003-00073;Rollos Para Sachets Nuevos Amarillos Tippytea;Salida;1789;uni;jennys_contabilidad;-1789
+2026-02-05;001-003-00058;Funda Zipper Transparente Grande 9x13;Salida;100;uni;jennys_contabilidad;-100
+2026-02-05;001-003-00164;Cartones 178314 (61);Salida;19;uni;jennys_contabilidad (Corrigió);-19
+2026-02-05;001-003-00163;Cartones 178314 (71 Cajas Grandes);Salida;3;uni;jennys_contabilidad;-3
+2026-02-05;004-000-00240;Cedron Aromas;Salida;561;gr;jennys_contabilidad;-561
+2026-02-05;004-000-00239;Toronjil Aromas;Salida;570;gr;jennys_contabilidad;-570
+2026-02-05;004-000-00233;Hierbabuena Aromas;Salida;635;gr;jennys_contabilidad;-635
+2026-02-05;004-000-00217;Guayusa Verde Martha;Salida;212;gr;jennys_contabilidad;-212
+2026-02-05;005-000-00178;Piramide Te Negro Puro;Salida;240;uni;jennys_contabilidad;-240
+2026-02-05;004-000-00243;Manzanilla Pucara;Salida;480;gr;jennys_contabilidad;-480
+2026-02-05;004-000-00245;Menta Pucara;Salida;620;gr;jennys_contabilidad;-620
+2026-02-05;004-000-00277;Hierbaluisa Aylluorganic;Salida;500;gr;jennys_contabilidad;-500
+2026-02-05;001-003-00073;Rollos Para Sachets Nuevos Amarillos Tippytea;Salida;261;uni;jennys_contabilidad;-261
+2026-02-05;004-000-00217;Guayusa Verde Martha;Salida;52;gr;jennys_contabilidad;-52
+2026-02-05;005-000-00131;Soluble Dragon Fruit;Salida;180;gr;jennys_contabilidad;-180
+2026-02-05;004-000-00125;Maltodextrina;Salida;69707;gr;jennys_contabilidad;-69707
+2026-02-05;004-000-00403;Acido Citrico;Salida;2683;gr;jennys_contabilidad;-2683
+2026-02-05;004-000-00403;Acido Citrico;Salida;0;gr;jennys_contabilidad;0
+2026-02-05;004-000-00403;Acido Citrico;Salida;5151;gr;jennys_contabilidad;-5151
+2026-02-05;004-000-00123;Acido Ascorbico;Salida;2683;gr;jennys_contabilidad;-2683
+2026-02-05;001-001-00013;Sucralosa;Salida;2773;gr;jennys_contabilidad;-2773
+2026-02-05;004-000-00395;Colorante Rojo Florarom;Salida;63;gr;jennys_contabilidad;-63
+2026-02-05;004-000-00174;Jengibre Polvo Ile;Salida;4220;gr;jennys_contabilidad;-4220
+2026-02-05;004-000-00248;Jamaica Importada;Salida;2440;gr;jennys_contabilidad;-2440
+2026-02-05;004-000-00170;Amaranto Ile;Salida;1000;gr;jennys_contabilidad;-1000
+2026-02-05;001-001-00012;Stevia En Hoja Ile;Salida;320;gr;jennys_contabilidad;-320
+2026-02-05;004-000-00378;Saborizante Sandia Magic Flavors;Salida;250;gr;jennys_contabilidad;-250
+2026-02-05;004-000-00265;Remolacha En Polvo Importada;Salida;392;gr;jennys_contabilidad;-392
+2026-02-05;004-000-00266;Fresa En Polvo Importada;Salida;245;gr;jennys_contabilidad;-245
+2026-02-05;004-000-00268;Piatahaya En Polvo Importada;Salida;84;gr;jennys_contabilidad;-84
+2026-02-05;004-000-00269;Mora En Polvo Importada;Salida;109;gr;jennys_contabilidad;-109
+2026-02-05;004-000-00339;Saborizante Frutos Rojos Polvo Adiqmat;Salida;39;gr;jennys_contabilidad;-39
+2026-02-05;001-001-00049;Saborizante Vainilla En Polvo Florarom;Salida;139;gr;jennys_contabilidad;-139
+2026-02-05;004-000-00250;Matcha Culinario Importado;Salida;731;gr;jennys_contabilidad;-731
+2026-02-05;004-000-00264;Taro Importado;Salida;659;gr;jennys_contabilidad;-659
+2026-02-05;004-000-00267;Papa Morada En Polvo Importada;Salida;245;gr;jennys_contabilidad;-245
+2026-02-05;004-000-00350;Saborizante Mora Azul Polvo;Salida;40;gr;jennys_contabilidad;-40
+2026-02-06;001-001-00065;Toronja En Polvo Florarom;Salida;8101;gr;jennys_contabilidad;-8101
+2026-02-06;001-001-00064;Mandarina En Polvo Florarom;Salida;7122;gr;jennys_contabilidad;-7122
+2026-02-06;005-000-00025;Pink Matcha P;Entrada;396;gr;jennys_contabilidad;396
+2026-02-06;005-000-00081;Blends Sandia Jamaica;Entrada;127;gr;jennys_contabilidad;127
+2026-02-06;005-000-00134;Soluble Taro Purple;Entrada;696;gr;jennys_contabilidad;696
+2026-02-06;003-021-00254;Piramides Sachet Manzanilla;Entrada;21;uni;jennys_contabilidad;21
+2026-02-06;003-021-00256;Piramides Sachet Anis;Entrada;40;uni;jennys_contabilidad;40
+2026-02-06;003-021-00246;Piramide Sachet Cedron;Entrada;13;uni;jennys_contabilidad;13
+2026-02-06;005-000-00189;Piramide Te Negro Kfc;Entrada;11;uni;jennys_contabilidad;11
+2026-02-06;003-021-00257;Piramides Sachet Toronjil;Entrada;10;uni;jennys_contabilidad;10
+2026-02-06;003-021-00252;Piramides Sachet Guayusa;Entrada;18;uni;jennys_contabilidad;18
+2026-02-06;004-000-00374;Saborizante Cereza;Salida;890;gr;jennys_contabilidad;-890
+2026-02-06;004-000-00401;Azucar;Salida;32000;gr;jennys_contabilidad;-32000
+2026-02-06;004-000-00400;Benzoato;Salida;153;gr;jennys_contabilidad;-153
+2026-02-06;004-000-00403;Acido Citrico;Salida;981;gr;jennys_contabilidad;-981
+2026-02-06;004-000-00405;Sorbato De Potasio;Salida;225;gr;jennys_contabilidad;-225
+2026-02-06;004-000-00398;Gluconolactato Top Trading;Salida;3200;gr;jennys_contabilidad;-3200
+2026-02-06;004-000-00404;Goma Xhantan;Salida;260;gr;jennys_contabilidad;-260
+2026-02-06;004-000-00406;Goma Guar;Salida;360;gr;jennys_contabilidad;-360
+2026-02-06;004-000-00407;Glucosa;Salida;40000;gr;jennys_contabilidad;-40000
+2026-02-06;004-000-00408;Cloruro;Salida;24;gr;jennys_contabilidad;-24
+2026-02-06;004-000-00402;Alginato;Salida;945;gr;jennys_contabilidad;-945
+2026-02-06;001-003-00025;Liner De Aluminio Tapa 120mm;Salida;100;uni;jennys_contabilidad;-100
+2026-02-06;001-003-00052;Frascos Para Bubbletea;Salida;80;uni;jennys_contabilidad;-80
+2026-02-06;004-000-00125;Maltodextrina;Salida;19769;gr;jennys_contabilidad;-19769
+2026-02-06;004-000-00248;Jamaica Importada;Salida;1131;gr;jennys_contabilidad;-1131
+2026-02-06;004-000-00124;Citrato De Sodio;Salida;219;gr;jennys_contabilidad;-219
+2026-02-06;004-000-00375;Saborizante Cereza En Polvo;Salida;90;gr;jennys_contabilidad;-90
+2026-02-06;004-000-00328;Saborizante Arandano En Polvo;Salida;103;gr;jennys_contabilidad;-103
+2026-02-06;004-000-00388;Saborizante Fresa Natural En Polvo;Salida;86;gr;jennys_contabilidad;-86
+2026-02-06;001-001-00013;Sucralosa;Salida;26;gr;jennys_contabilidad;-26
+2026-02-06;004-000-00126;Stevia En Polvo Florarom;Salida;9;gr;jennys_contabilidad;-9
+2026-02-06;001-003-00166;Cartones 188399 (51 );Salida;3;uni;jennys_contabilidad;-3
+2026-02-06;003-001-00155;Blends Flower & Kisses;Salida;68;gr;jennys_contabilidad;-68
+2026-02-06;004-000-00243;Manzanilla Pucara;Salida;61;gr;jennys_contabilidad;-61
+2026-02-06;004-000-00252;Lavanda Importada;Salida;31;gr;jennys_contabilidad;-31
+2026-02-06;003-001-00104;Blends Lemon Ginger;Salida;560;gr;jennys_contabilidad;-560
+2026-02-06;001-003-00073;Rollos Para Sachets Nuevos Amarillos Tippytea;Salida;359;uni;jennys_contabilidad;-359
+2026-02-06;003-001-00121;Blends Strawberry Kiwi;Salida;503;gr;jennys_contabilidad;-503
+2026-02-06;004-000-00249;Matcha Sperior Importado;Salida;305;gr;jennys_contabilidad;-305
+2026-02-06;004-000-00257;Manzanilla Importada;Salida;1000;gr;jennys_contabilidad;-1000
+2026-02-06;004-000-00211;Te Negro Bolita Cetca;Salida;740;gr;jennys_contabilidad;-740
+2026-02-06;004-000-00254;Te Negro Kemuun Importado;Salida;2500;gr;jennys_contabilidad;-2500
+2026-02-06;004-000-00210;Polvo Chai Cetca;Salida;194;gr;jennys_contabilidad;-194
+2026-02-06;004-000-00156;Pimienta Blanca Dona Janna;Salida;36;gr;jennys_contabilidad;-36
+2026-02-06;004-000-00157;Pimienta Negra Dona Janna;Salida;31;gr;jennys_contabilidad;-31
+2026-02-06;004-000-00141;Cardamono Dona Janna;Salida;25;gr;jennys_contabilidad;-25
+2026-02-06;004-000-00149;Clavo De Olor Dona Janna;Salida;30;gr;jennys_contabilidad;-30
+2026-02-06;004-000-00139;Anis Pequeno Dona Janna;Salida;28;gr;jennys_contabilidad;-28
+2026-02-06;004-000-00138;Anis Estrellado Dona Janna;Salida;30;gr;jennys_contabilidad;-30
+2026-02-06;001-001-00049;Saborizante Vainilla En Polvo Florarom;Salida;52;gr;jennys_contabilidad;-52
+2026-02-06;003-014-00003;Funda Pequeña Café Shopping Bag;Salida;1;uni;jennys_contabilidad;-1
+2026-02-06;005-000-00237;Pads Te Verde Fiorana;Salida;95;uni;jennys_contabilidad;-95
+2026-02-06;004-000-00401;Azucar;Salida;895;gr;jennys_contabilidad;-895
+2026-02-06;004-000-00403;Acido Citrico;Salida;5;gr;jennys_contabilidad;-5
+2026-02-06;004-000-00303;Fosfato Tricalcio;Salida;2;gr;jennys_contabilidad;-2
+2026-02-06;004-000-00395;Colorante Rojo Florarom;Salida;1;gr;jennys_contabilidad;-1
+2026-02-06;004-000-00228;Malva Olorosa Turucucho;Salida;1680;gr;jennys_contabilidad;-1680
+2026-02-06;004-000-00243;Manzanilla Pucara;Salida;500;gr;jennys_contabilidad;-500
+2026-02-06;004-000-00177;Esencia Rosas Ile;Salida;28;gr;jennys_contabilidad;-28
+2026-02-06;004-000-00314;Saborizante Rosas En Polvo;Salida;97;gr;jennys_contabilidad;-97
+2026-02-06;001-001-00084;jengibre en polvo dona janna;Salida;3115;gr;jennys_contabilidad;-3115
+2026-02-06;001-001-00083;soluble toronja y mandarina kfc;Salida;1231;gr;jennys_contabilidad;-1231
+2026-02-06;004-000-00139;Anis Pequeno Dona Janna;Salida;321;gr;jennys_contabilidad;-321
+2026-02-06;005-000-00066;Blends Butterfly;Salida;20;gr;jennys_contabilidad;-20
+2026-02-06;003-001-00098;Blends Earl Grey;Salida;467;gr;jennys_contabilidad;-467
+2026-02-06;004-000-00240;Cedron Aromas;Salida;274;gr;jennys_contabilidad;-274
+2026-02-06;003-001-00324;Blends Berry Berry;Salida;588;gr;jennys_contabilidad;-588
+2026-02-06;004-000-00251;Te Verde Importado;Salida;425;gr;jennys_contabilidad;-425
+2026-02-06;001-003-00073;Rollos Para Sachets Nuevos Amarillos Tippytea;Salida;1063;uni;jennys_contabilidad;-1063
+2026-02-06;001-003-00084;Rollos Tippytea;Salida;5000;uni;jennys_contabilidad;-5000
+2026-02-06;001-003-00163;Cartones 178314 (71 Cajas Grandes);Salida;1;uni;jennys_contabilidad;-1
+2026-02-06;003-021-00243;Piramides Sachet Berry Berry;Salida;0;uni;jennys_contabilidad;0
+2026-02-06;003-021-00243;Piramides Sachet Berry Berry;Salida;5;uni;jennys_contabilidad;-5
+2026-02-06;001-003-00073;Rollos Para Sachets Nuevos Amarillos Tippytea;Salida;59;uni;jennys_contabilidad;-59
+2026-02-06;003-021-00239;Piramides Sachet Green Tea;Salida;8;uni;jennys_contabilidad;-8
+2026-02-06;003-021-00238;Piramides Sachet Earl Grey;Entrada;5;uni;jennys_contabilidad;5
+2026-02-06;003-021-00246;Piramide Sachet Cedron;Salida;4;uni;jennys_contabilidad;-4
+2026-02-06;004-000-00265;Remolacha En Polvo Importada;Salida;386;gr;jennys_contabilidad;-386
+2026-02-06;004-000-00266;Fresa En Polvo Importada;Salida;243;gr;jennys_contabilidad;-243
+2026-02-06;004-000-00268;Piatahaya En Polvo Importada;Salida;96;gr;jennys_contabilidad;-96
+2026-02-06;004-000-00269;Mora En Polvo Importada;Salida;105;gr;jennys_contabilidad;-105
+2026-02-06;004-000-00339;Saborizante Frutos Rojos Polvo Adiqmat;Salida;39;gr;jennys_contabilidad;-39
+2026-02-06;001-001-00049;Saborizante Vainilla En Polvo Florarom;Salida;70;gr;jennys_contabilidad;-70
+2026-02-06;004-000-00250;Matcha Culinario Importado;Salida;51;gr;jennys_contabilidad;-51
+2026-02-06;004-000-00401;Azucar;Salida;72722;gr;jennys_contabilidad;-72722
+2026-02-06;004-000-00248;Jamaica Importada;Salida;3238;gr;jennys_contabilidad;-3238
+2026-02-06;004-000-00403;Acido Citrico;Salida;1620;gr;jennys_contabilidad;-1620
+2026-02-06;004-000-00124;Citrato De Sodio;Salida;810;gr;jennys_contabilidad;-810
+2026-02-06;004-000-00375;Saborizante Cereza En Polvo;Salida;824;gr;jennys_contabilidad;-824
+2026-02-06;004-000-00328;Saborizante Arandano En Polvo;Salida;811;gr;jennys_contabilidad;-811
+2026-02-06;004-000-00388;Saborizante Fresa Natural En Polvo;Salida;812;gr;jennys_contabilidad;-812
+2026-02-06;004-000-00303;Fosfato Tricalcio;Salida;162;gr;jennys_contabilidad;-162
+2026-02-06;004-000-00126;Stevia En Polvo Florarom;Salida;17;gr;jennys_contabilidad;-17
+2026-02-06;004-000-00415;Colorante Pupple 20gr;Salida;10;uni;jennys_contabilidad;-10
