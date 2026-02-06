@@ -43,26 +43,23 @@ def cargar_base_completa():
         try:
             df = pd.read_csv(FILE_PLANTA, skiprows=5)
             df.columns = df.columns.str.strip()
-            # Buscamos la columna de stock (la del 02-02-2026)
             col_stock = [c for c in df.columns if 'Conteo' in c]
             if col_stock:
                 df_base = df[['Codigo', 'Nombre', 'Unidad', col_stock[0]]].copy()
             else:
                 df_base = df.iloc[:, [0, 1, 2, 3]].copy()
-            
             df_base.columns = ['Codigo', 'Producto', 'Unidad', 'Stock_Inicial']
             df_base['Stock_Inicial'] = df_base['Stock_Inicial'].apply(limpiar_monto)
             df_base['Codigo'] = df_base['Codigo'].astype(str).str.strip()
-        except:
-            pass
+        except: pass
 
     if os.path.exists(FILE_EXTRA_PRODS):
         try:
             df_extra = pd.read_csv(FILE_EXTRA_PRODS, sep=None, engine='python')
+            df_extra.columns = df_extra.columns.str.strip()
             df_extra['Codigo'] = df_extra['Codigo'].astype(str).str.strip()
             df_base = pd.concat([df_base, df_extra], ignore_index=True)
-        except:
-            pass
+        except: pass
     return df_base.drop_duplicates(subset=['Codigo'])
 
 # --- 2. SEGURIDAD ---
@@ -84,9 +81,19 @@ if st.session_state["authentication_status"]:
     authenticator.logout('Cerrar Sesión', 'sidebar')
     df_base = cargar_base_completa()
     
-    # LEER MOVIMIENTOS (Detecta ; o , automáticamente)
+    # LECTURA ROBUSTA DE MOVIMIENTOS
     try:
-        df_movs = pd.read_csv(FILE_MOVS, sep=None, engine='python')
+        # Forzamos separador ; ya que vimos que así lo subiste
+        df_movs = pd.read_csv(FILE_MOVS, sep=';', engine='python')
+        # ESTA ES LA CLAVE: Limpiar nombres de columnas
+        df_movs.columns = df_movs.columns.str.strip()
+        
+        # Verificar que las columnas necesarias existan, si no, crear vacío
+        columnas_necesarias = ['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario']
+        for col in columnas_necesarias:
+            if col not in df_movs.columns:
+                df_movs[col] = ""
+        
         df_movs['Codigo'] = df_movs['Codigo'].astype(str).str.strip()
     except:
         df_movs = pd.DataFrame(columns=['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario'])
@@ -110,7 +117,6 @@ if st.session_state["authentication_status"]:
     with tab1:
         st.subheader(f"Inventario Planta | {st.session_state['name']}")
         
-        # TABLA DE ACTIVIDAD (REQUERIDA)
         st.markdown("### 🔍 Productos con Movimientos Recientes")
         df_actividad = df_final[(df_final['Entradas'] > 0) | (df_final['Salidas'] > 0)].copy()
         if not df_actividad.empty:
@@ -121,7 +127,6 @@ if st.session_state["authentication_status"]:
 
         st.divider()
         
-        # REGISTRO
         with st.expander("➕ REGISTRAR MOVIMIENTO", expanded=True):
             df_base['L'] = df_base['Codigo'].astype(str) + " | " + df_base['Producto']
             sel = st.multiselect("Seleccionar productos:", df_base['L'])
@@ -141,23 +146,19 @@ if st.session_state["authentication_status"]:
                                            'Tipo': tipo, 'Cantidad': float(st.session_state[f"val_{cid}"]),
                                            'Unidad': df_base[df_base['Codigo'] == cid]['Unidad'].values[0],
                                            'Usuario': st.session_state['username']})
-                        # Guardar manteniendo el formato original
                         df_updated = pd.concat([df_movs.drop(columns=['Entradas','Salidas'], errors='ignore'), pd.DataFrame(nuevos)], ignore_index=True)
                         df_updated.to_csv(FILE_MOVS, index=False, sep=';')
                         st.cache_data.clear(); st.success("¡Guardado!"); st.rerun()
 
-        # HISTORIAL COMPLETO
         st.markdown("### 📑 Historial de todos los Movimientos")
-        bus_h = st.text_input("Filtrar historial:")
         if not df_movs.empty:
-            df_h = df_movs[['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario']].copy()
-            if bus_h:
-                df_h = df_h[df_h.apply(lambda r: bus_h.lower() in str(r).lower(), axis=1)]
-            st.dataframe(df_h.sort_index(ascending=False), use_container_width=True, hide_index=True)
+            # Seleccionamos columnas de forma segura
+            columnas_hist = [c for c in ['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario'] if c in df_movs.columns]
+            st.dataframe(df_movs[columnas_hist].sort_index(ascending=False), use_container_width=True, hide_index=True)
 
     with tab2:
         st.markdown("### 📊 Análisis de Stock")
-        if not df_movs.empty:
+        if not df_movs.empty and 'Producto' in df_movs.columns:
             fig = px.bar(df_movs.groupby(['Producto', 'Tipo'])['Cantidad'].sum().reset_index(), 
                          x='Producto', y='Cantidad', color='Tipo', barmode='group')
             st.plotly_chart(fig, use_container_width=True)
@@ -168,18 +169,6 @@ if st.session_state["authentication_status"]:
 
     with tab3:
         st.subheader("⚙️ Panel de Correcciones")
-        c1, c2 = st.columns(2)
-        with c1:
-            st.markdown("#### ✨ Producto Nuevo")
-            with st.form("n_p"):
-                nc, nn = st.text_input("Código"), st.text_input("Nombre")
-                nu = st.selectbox("Unidad", ["gr", "uni", "kg", "ml"])
-                ns = st.number_input("Stock Inicial", min_value=0.0)
-                if st.form_submit_button("Crear"):
-                    df_ex = pd.read_csv(FILE_EXTRA_PRODS, sep=None, engine='python') if os.path.exists(FILE_EXTRA_PRODS) else pd.DataFrame()
-                    pd.concat([df_ex, pd.DataFrame([{'Codigo':nc,'Producto':nn,'Unidad':nu,'Stock_Inicial':ns}])], ignore_index=True).to_csv(FILE_EXTRA_PRODS, index=False, sep=';')
-                    st.cache_data.clear(); st.rerun()
-        
         if st.button("🗑️ DESHACER ÚLTIMA CARGA"):
             if not df_movs.empty:
                 df_movs.drop(df_movs.index[-1]).drop(columns=['Entradas','Salidas'], errors='ignore').to_csv(FILE_MOVS, index=False, sep=';')
