@@ -9,24 +9,18 @@ import io
 # --- 1. CONFIGURACIÓN ---
 st.set_page_config(page_title="Tippytea | Kardex", layout="wide", page_icon="🍵")
 
-# Nombres de archivos
 FILE_MOVS = "movimientos_kardex.csv"
-FILE_EXTRA_PRODS = "productos_extra.csv" 
+FILE_EXTRA_PRODS = "productos_extra.csv"
 
 def inicializar_archivos():
-    # Asegura archivo de Movimientos (Donde están tus 40 registros)
-    columnas_movs = ['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario']
     if not os.path.exists(FILE_MOVS):
-        pd.DataFrame(columns=columnas_movs).to_csv(FILE_MOVS, index=False)
-    
-    # Asegura archivo de Productos Extra (Se crea solo si no existe)
-    columnas_extra = ['Codigo', 'Producto', 'Unidad', 'Stock_Inicial']
+        pd.DataFrame(columns=['Fecha', 'Codigo', 'Producto', 'Tipo', 'Cantidad', 'Unidad', 'Usuario']).to_csv(FILE_MOVS, index=False)
     if not os.path.exists(FILE_EXTRA_PRODS):
-        pd.DataFrame(columns=columnas_extra).to_csv(FILE_EXTRA_PRODS, index=False)
+        pd.DataFrame(columns=['Codigo', 'Producto', 'Unidad', 'Stock_Inicial']).to_csv(FILE_EXTRA_PRODS, index=False)
 
 inicializar_archivos()
 
-# --- FUNCIONES DE APOYO ---
+# --- FUNCIONES ---
 def to_excel(df):
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
@@ -43,24 +37,20 @@ def limpiar_monto(valor):
 
 @st.cache_data
 def cargar_base_completa():
-    # Cargar base original desde el CSV de Planta
     file_path = 'Inventarios - Planta.csv'
     df_base = pd.DataFrame()
     if os.path.exists(file_path):
         df = pd.read_csv(file_path, skiprows=5)
         df.columns = df.columns.str.strip()
-        # Ajustado a tu columna de conteo específica
         col_conteo = 'Conteo 02-02-2026'
         df_base = df[['Codigo', 'Nombre', 'Unidad', col_conteo]].copy()
         df_base.columns = ['Codigo', 'Producto', 'Unidad', 'Stock_Inicial']
         df_base['Stock_Inicial'] = df_base['Stock_Inicial'].apply(limpiar_monto)
         df_base = df_base.dropna(subset=['Producto'])
 
-    # Unir con productos nuevos (los creados desde la app)
     if os.path.exists(FILE_EXTRA_PRODS):
         df_extra = pd.read_csv(FILE_EXTRA_PRODS)
         df_base = pd.concat([df_base, df_extra], ignore_index=True)
-    
     return df_base
 
 # --- 2. SEGURIDAD ---
@@ -80,11 +70,10 @@ if not st.session_state.get("authentication_status"):
 
 if st.session_state["authentication_status"]:
     authenticator.logout('Cerrar Sesión', 'sidebar')
-    
     df_base = cargar_base_completa()
     df_movs = pd.read_csv(FILE_MOVS)
 
-    # --- CÁLCULO DE STOCKS ---
+    # --- CÁLCULO DE STOCK ACTUAL ---
     if not df_movs.empty:
         df_movs['Cantidad'] = pd.to_numeric(df_movs['Cantidad'], errors='coerce').fillna(0)
         df_movs['Ajuste'] = df_movs.apply(lambda x: x['Cantidad'] if x['Tipo'] == 'Entrada' else -x['Cantidad'], axis=1)
@@ -98,8 +87,20 @@ if st.session_state["authentication_status"]:
     tab1, tab2, tab3 = st.tabs(["📋 Gestión de Stock", "📈 Análisis Contable", "⚙️ Mantenimiento"])
 
     with tab1:
-        st.markdown(f"### 🛠️ Registro - Usuario: **{st.session_state['name']}**")
-        with st.expander("Registrar Entradas / Salidas", expanded=True):
+        st.subheader(f"Bienvenido, {st.session_state['name']}")
+        
+        # 1. TABLA DE INVENTARIO ACTUAL (LA QUE SE HABÍA IDO)
+        st.markdown("### 🏬 Inventario Actualizado")
+        busqueda_inv = st.text_input("🔍 Buscar en inventario (Código o Nombre):", key="search_inv")
+        df_display_inv = df_final[['Codigo', 'Producto', 'Unidad', 'Stock_Actual']].copy()
+        if busqueda_inv:
+            df_display_inv = df_display_inv[df_display_inv.apply(lambda r: busqueda_inv.lower() in str(r).lower(), axis=1)]
+        st.dataframe(df_display_inv, use_container_width=True, hide_index=True)
+
+        st.divider()
+
+        # 2. REGISTRO DE MOVIMIENTOS
+        with st.expander("➕ Registrar Nuevo Movimiento", expanded=False):
             df_base['L'] = df_base['Codigo'].astype(str) + " | " + df_base['Producto']
             sel = st.multiselect("Seleccionar productos:", df_base['L'])
             if sel:
@@ -109,83 +110,73 @@ if st.session_state["authentication_status"]:
                     fecha = c2.date_input("Fecha:", datetime.now())
                     for s in sel:
                         cid = s.split(" | ")[0]
-                        st.number_input(f"{s.split(' | ')[1]}", key=f"val_{cid}", min_value=0.0)
+                        st.number_input(f"Cantidad para: {s.split(' | ')[1]}", key=f"val_{cid}", min_value=0.0)
                     
-                    if st.form_submit_button("Guardar Movimiento"):
-                        nuevos_m = []
+                    if st.form_submit_button("Guardar"):
+                        nuevos = []
                         for s in sel:
                             cid = s.split(" | ")[0]
-                            nuevos_m.append({
+                            nuevos.append({
                                 'Fecha': str(fecha), 'Codigo': cid, 'Producto': s.split(" | ")[1],
                                 'Tipo': tipo, 'Cantidad': float(st.session_state[f"val_{cid}"]),
                                 'Unidad': df_base[df_base['Codigo'] == cid]['Unidad'].values[0],
                                 'Usuario': st.session_state['username']
                             })
-                        df_updated = pd.concat([df_movs, pd.DataFrame(nuevos_m)], ignore_index=True)
-                        df_updated.to_csv(FILE_MOVS, index=False)
-                        st.success("¡Registrado con éxito!")
-                        st.rerun()
+                        pd.concat([df_movs, pd.DataFrame(nuevos)], ignore_index=True).to_csv(FILE_MOVS, index=False)
+                        st.success("Guardado!"); st.rerun()
 
         st.markdown("### 📑 Historial de Movimientos")
-        busqueda = st.text_input("🔍 Buscar por Código o Producto:")
         if not df_movs.empty:
-            reporte_det = df_movs.copy().merge(df_final[['Codigo', 'Stock_Inicial', 'Stock_Actual']], on='Codigo', how='left')
-            reporte_det['Mov.'] = reporte_det.apply(lambda x: f"+ {x['Cantidad']}" if x['Tipo'] == 'Entrada' else f"- {x['Cantidad']}", axis=1)
-            reporte_det = reporte_det[['Fecha', 'Codigo', 'Producto', 'Stock_Inicial', 'Mov.', 'Stock_Actual', 'Usuario']]
-            if busqueda:
-                reporte_det = reporte_det[reporte_det.apply(lambda row: busqueda.lower() in str(row).lower(), axis=1)]
-            st.dataframe(reporte_det.sort_index(ascending=False), use_container_width=True, hide_index=True)
+            st.dataframe(df_movs.sort_index(ascending=False), use_container_width=True, hide_index=True)
 
     with tab2:
-        st.markdown("### 📊 Reportes")
+        st.markdown("### 📊 Análisis de Movimientos")
         if not df_movs.empty:
-            c1, c2 = st.columns(2)
-            c1.download_button("📥 Inventario Actual (.xlsx)", data=to_excel(df_final[['Codigo','Producto','Unidad','Stock_Actual']]), file_name="Inventario.xlsx")
-            c2.download_button("📥 Historial Filtrado (.xlsx)", data=to_excel(reporte_det), file_name="Historial.xlsx")
+            # Gráfico con mejores colores
             fig = px.bar(df_movs.groupby(['Producto', 'Tipo'])['Cantidad'].sum().reset_index(), 
-                         x='Producto', y='Cantidad', color='Tipo', barmode='group')
+                         x='Producto', y='Cantidad', color='Tipo', 
+                         barmode='group',
+                         color_discrete_map={'Entrada': '#2ecc71', 'Salida': '#e74c3c'}) # Verde y Rojo
             st.plotly_chart(fig, use_container_width=True)
+            
+            st.download_button("📥 Descargar Reporte Excel", data=to_excel(df_final), file_name="Inventario_Tippytea.xlsx")
 
     with tab3:
-        st.subheader("⚙️ Panel de Mantenimiento")
+        st.subheader("⚙️ Mantenimiento del Sistema")
         
-        # AGREGAR PRODUCTO NUEVO
-        with st.expander("✨ Dar de alta un producto nuevo"):
-            st.info("Esto añadirá el producto a la lista de gestión sin borrar los existentes.")
-            with st.form("form_nuevo"):
+        c1, c2 = st.columns(2)
+        
+        with c1:
+            st.markdown("#### ✨ Producto Nuevo")
+            with st.form("n_prod_form"):
                 nc = st.text_input("Código")
                 nn = st.text_input("Nombre")
                 nu = st.selectbox("Unidad", ["gr", "uni", "kg", "ml"])
                 ns = st.number_input("Stock Inicial", min_value=0.0)
-                if st.form_submit_button("Confirmar Producto"):
+                if st.form_submit_button("Crear"):
                     if nc and nn:
                         df_ex = pd.read_csv(FILE_EXTRA_PRODS)
-                        new_p = pd.DataFrame([{'Codigo': nc, 'Producto': nn, 'Unidad': nu, 'Stock_Inicial': ns}])
-                        pd.concat([df_ex, new_p], ignore_index=True).to_csv(FILE_EXTRA_PRODS, index=False)
-                        st.cache_data.clear()
-                        st.success(f"Producto {nn} listo.")
-                        st.rerun()
+                        pd.concat([df_ex, pd.DataFrame([{'Codigo':nc,'Producto':nn,'Unidad':nu,'Stock_Inicial':ns}])], ignore_index=True).to_csv(FILE_EXTRA_PRODS, index=False)
+                        st.cache_data.clear(); st.success("Creado!"); st.rerun()
+
+        with c2:
+            st.markdown("#### 🛠️ Corregir Registro")
+            if not df_movs.empty:
+                df_edit = df_movs.copy()
+                df_edit['Label'] = df_edit.index.astype(str) + " - " + df_edit['Producto']
+                sel_edit = st.selectbox("Elegir para corregir:", df_edit['Label'])
+                idx = int(sel_edit.split(" - ")[0])
+                with st.form("edit_form"):
+                    new_f = st.text_input("Fecha", value=df_movs.iloc[idx]['Fecha'])
+                    new_c = st.number_input("Cantidad", value=float(df_movs.iloc[idx]['Cantidad']))
+                    if st.form_submit_button("Actualizar"):
+                        df_movs.at[idx, 'Fecha'] = new_f
+                        df_movs.at[idx, 'Cantidad'] = new_c
+                        df_movs.to_csv(FILE_MOVS, index=False)
+                        st.success("Corregido!"); st.rerun()
 
         st.divider()
-        st.markdown("#### 🛠️ Corregir Datos")
-        if not df_movs.empty:
-            df_edit = df_movs.copy()
-            df_edit['Sel'] = df_edit.index.astype(str) + " | " + df_edit['Producto']
-            op_edit = st.selectbox("Registro a editar:", df_edit['Sel'])
-            idx_edit = int(op_edit.split(" | ")[0])
-            row = df_movs.iloc[idx_edit]
-            
-            with st.form("edit_f"):
-                e_f = st.text_input("Fecha", value=row['Fecha'])
-                e_c = st.number_input("Cantidad", value=float(row['Cantidad']))
-                if st.form_submit_button("Guardar Cambios"):
-                    df_movs.at[idx_edit, 'Fecha'] = e_f
-                    df_movs.at[idx_edit, 'Cantidad'] = e_c
-                    df_movs.to_csv(FILE_MOVS, index=False)
-                    st.success("Información actualizada.")
-                    st.rerun()
-        
-        if st.button("↩️ Deshacer Último Registro"):
+        if st.button("🗑️ Borrar ÚLTIMO Registro Completo"):
             if not df_movs.empty:
-                pd.read_csv(FILE_MOVS).drop(df_movs.index[-1]).to_csv(FILE_MOVS, index=False)
+                df_movs.drop(df_movs.index[-1]).to_csv(FILE_MOVS, index=False)
                 st.warning("Eliminado."); st.rerun()
